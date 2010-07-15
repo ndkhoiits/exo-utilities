@@ -24,10 +24,12 @@
   <parent>
     <groupId>org.exoplatform.portal</groupId>
     <artifactId>exo.portal.parent</artifactId>
-    <version>3.2.0-Beta01-SNAPSHOT</version>
+    <version>3.1.0-GA</version>
   </parent>
 
-  <artifactId>exo.portal.gadgets</artifactId>
+  <groupId>exo.portal.gadgets.extension</groupId>
+  <artifactId>gadgets.extension</artifactId>
+  <version>3.2.0-Beta01-SNAPSHOT</version>
   <name>GateIn Portal eXo Gadgets Extension</name>
   <packaging>pom</packaging>
 
@@ -35,4 +37,77 @@
 	<module>rest</module>
 	<module>eXoGadgets.Ext</module>
   </modules>
+  <repositories>
+      <repository>
+        <id>jboss-public-repository-group</id>
+        <name>JBoss Public Maven Repository Group</name>
+        <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+        <layout>default</layout>
+        <releases>
+          <enabled>true</enabled>
+          <updatePolicy>never</updatePolicy>
+        </releases>
+        <snapshots>
+          <enabled>true</enabled>
+          <updatePolicy>never</updatePolicy>
+        </snapshots>
+      </repository>
+      <repository>
+         <id>oauth</id>
+         <url>http://oauth.googlecode.com/svn/code/maven</url>
+         <releases>
+            <enabled>true</enabled>
+         </releases>
+         <snapshots>
+            <enabled>false</enabled>
+         </snapshots>
+      </repository>
+      <repository>
+         <id>java.net</id>
+         <url>http://download.java.net/maven/2</url>
+         <releases>
+            <enabled>true</enabled>
+         </releases>
+         <snapshots>
+            <enabled>false</enabled>
+         </snapshots>
+      </repository>
+      <repository>
+         <id>exo-int</id>
+         <url>http://maven2.exoplatform.org/rest/maven2</url>
+         <releases>
+           <enabled>true</enabled>
+         </releases>
+         <snapshots>
+           <enabled>false</enabled>
+         </snapshots>
+      </repository>
+  </repositories>
+
+  <pluginRepositories>
+        <pluginRepository>
+          <id>jboss-public-repository-group</id>
+          <name>JBoss Public Maven Repository Group</name>
+          <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+          <layout>default</layout>
+          <releases>
+            <enabled>true</enabled>
+            <updatePolicy>never</updatePolicy>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>never</updatePolicy>
+          </snapshots>
+        </pluginRepository>
+      <pluginRepository>
+         <id>java.net</id>
+         <url>http://download.java.net/maven/2</url>
+         <releases>
+            <enabled>true</enabled>
+         </releases>
+         <snapshots>
+            <enabled>false</enabled>
+         </snapshots>
+      </pluginRepository>
+   </pluginRepositories>
 </project>
