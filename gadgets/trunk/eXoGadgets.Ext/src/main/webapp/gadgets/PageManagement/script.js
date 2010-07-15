@@ -48,10 +48,14 @@ function searchPage() {
   var searchType = searchTypeObject[searchTypeObject.selectedIndex].value;
   
   var url = "http://localhost:8080/portal/rest/dataManager/query/pages/";
-  if(searchType == "Owner id") {
-    url += "*/" + filterString;
-  } else if(searchType == "Owner type") {
-    url += filterString + "/*";
+  if(filterString != "") {
+    if(searchType == "Owner id") {
+      url += "*/" + filterString;
+    } else if(searchType == "Owner type") {
+      url += filterString + "/*";
+    } else {
+      url += "*/*";
+    }
   } else {
     url += "*/*";
   }
