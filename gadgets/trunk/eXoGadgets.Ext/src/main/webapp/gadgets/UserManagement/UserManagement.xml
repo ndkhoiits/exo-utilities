@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+<!--
+ **
+ * Created by The eXo Platform SEA
+ * Author : kien.nguyen
+ *          nguyenanhkien2a@gmail.com
+ * Jul 14, 2010          
+ *
+-->
+<Module>
+   <ModulePrefs author="eXoPlatform"
+                title="User Management"
+                directory_title="User Management"
+                title_url="http://www.exoplatform.org"
+                description="User Management"
+                thumbnail="http://localhost:8080/eXoGadgets.Ext/skin/DefaultSkin/portletIcons/UserManagement.png"                
+                height="227">
+      <Locale lang="ar" language_direction="rtl"/>
+   </ModulePrefs>
+   <Content type="html" view="home">
+      <![CDATA[
+        <link rel="stylesheet" type="text/css" href="style.css"></link>
+	    <script type="text/javascript" src="script.js"></script>
+		<script type="text/javascript">
+			function renderPagesList(jsonData) {	
+			    var plTable = document.getElementById("plTable");
+				var plBody = document.getElementById("plBody");
+			    if(plBody != null && plBody != "undefined") {
+				  	plTable.removeChild(plBody);			    	
+			    }
+			    
+			    plBody = document.createElement("tbody");	
+			    plBody.setAttribute("id", "plBody");
+				plTable.appendChild(plBody);
+
+				var jsonObject = eval("(" + jsonData + ")");
+				if(jsonObject == "undefined")
+					return;
+					
+				var count = jsonObject.user.length
+				for ( var i = 0; i < count ; i++ ) {		
+					var plRow = document.createElement("tr");
+					plRow.setAttribute("style", "width:100%");
+					plRow.setAttribute("class", i%2 ? "OddRow":"EvenRow");	
+										
+					var plCell = document.createElement("td");						
+					plCell.innerHTML = jsonObject.user[i]["userName"];
+					plCell.setAttribute("style", "width:50%");	
+					userName = plCell.innerHTML;					
+					plRow.appendChild(plCell);			
+					
+					plCell = document.createElement("td");	
+					actionClick = "deleteUser('" + userName + "')";			
+					plCell.innerHTML =	"<img title='Delete page' class='DeleteIcon' src='/eXoGadgets.Ext/skin/image/Blank.gif' onclick=" + actionClick + " />";	
+					plCell.setAttribute("style", "width:50%");						
+					plRow.appendChild(plCell);
+					
+					plBody.appendChild(plRow);				
+				}
+			}
+
+		</script>
+		<body  onload="getAllUsers();">
+			<div id="UIPageBrowser" class="UIPageBrowser">
+				<div class="UIGrid">
+					<table id="plTable" cellspacing="0" border="1" style="width:100%;text-align: left;">
+						<thead id="plHead" style="width:100%">
+						  <tr style="width:100%">         
+				                    <th style="width:50%">User Name</th>                                                    
+				                    <th style="width:50%">Action</th>                   
+					     </tr>
+						</thead>
+						<tbody id="plBody" style="width:100%;">
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</body>
+	]]>
+   </Content>
+   
+   <Content type="html" view="canvas">
+      <![CDATA[
+        <link rel="stylesheet" type="text/css" href="style.css"></link>
+	    <script type="text/javascript" src="script.js"></script>
+		<style type="text/css">
+		</style>
+		<script type="text/javascript">		
+			function renderPagesList(jsonData) {	
+			    var plTable = document.getElementById("plTable");
+				var plBody = document.getElementById("plBody");
+			    if(plBody != null && plBody != "undefined") {
+				  	plTable.removeChild(plBody);			    	
+			    }
+			    
+			    plBody = document.createElement("tbody");	
+			    plBody.setAttribute("id", "plBody");
+				plTable.appendChild(plBody);
+
+				var jsonObject = eval("(" + jsonData + ")");
+				if(jsonObject == "undefined")
+					return;
+					
+				var count = jsonObject.user.length
+				for ( var i = 0; i < count; i++ ) {		
+					var plRow = document.createElement("tr");
+					plRow.setAttribute("style", "width:100%");	
+					plRow.setAttribute("class", i%2 ? "OddRow":"EvenRow");
+					
+					var plCell = document.createElement("td");						
+					plCell.innerHTML = jsonObject.user[i]["userName"];
+					plCell.setAttribute("style", "width:20%");	
+					userName = plCell.innerHTML;						
+					plRow.appendChild(plCell);	
+
+					plCell = document.createElement("td");						
+					plCell.innerHTML = jsonObject.user[i]["lastName"];
+					plCell.setAttribute("style", "width:20%");							
+					plRow.appendChild(plCell);	
+					
+					plCell = document.createElement("td");						
+					plCell.innerHTML = jsonObject.user[i]["firstName"];
+					plCell.setAttribute("style", "width:20%");						
+					plRow.appendChild(plCell);
+
+					plCell = document.createElement("td");						
+					plCell.innerHTML = jsonObject.user[i]["email"];
+					plCell.setAttribute("style", "width:20%");						
+					plRow.appendChild(plCell);
+					
+					plCell = document.createElement("td");						
+					actionClick = "deleteUser('" + userName + "')";			
+					plCell.innerHTML =	"<img title='Delete page' class='DeleteIcon' src='/eXoGadgets.Ext/skin/image/Blank.gif' onclick=" + actionClick + " />";	
+					plCell.setAttribute("style", "width:20%");						
+					plRow.appendChild(plCell);
+					
+					plBody.appendChild(plRow);				
+				}
+			}			
+			
+		</script>
+		<body  onload="getAllUsers();">
+			<div class="UISearchForm" id="UISearchForm">
+				<input id="SearchInput" class="SearchInput" type="text" value="">
+				<select class="SearchType" id="SearchType">
+					<option value="userName">User Name</option>
+					<option value="lastName">Last Name</option>
+					<option value="firstName">First Name</option>
+					<option value="email">Email</option>
+				</select>
+				<input type="button" name="test" value="Search" onClick="searchUser();">					 
+			</div>
+			<div id="UIPageBrowser" class="UIPageBrowser">
+				<div class="UIGrid">
+					<table id="plTable" cellspacing="0" border="1" style="width:100%; text-align: left;">
+						<thead id="plHead" style="width:100%">
+						  <tr style="width:100%">         
+				                    <th style="width:20%">User Name</th>    
+				                    <th style="width:20%">Last Name</th>                 
+				                    <th style="width:20%">First Name</th>                  
+				                    <th style="width:20%">Email</th>                    
+				                    <th style="width:20%">Action</th>                   
+					     </tr>
+						</thead>
+						<tbody id="plBody" style="width:100%;">
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</body>
+	]]>
+   </Content>
+</Module>
