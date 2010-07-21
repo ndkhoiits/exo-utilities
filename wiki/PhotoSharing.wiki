@@ -9,20 +9,19 @@ The Photo Sharing is a portlet that allow you can share some photos by upload fr
 
 === 1. Add pictures ===
 User can select addition a picture from local file or URI.
-- With local file: User selects one or more picture files from his computer. Portlet must validate them and upload to his picture storage
-- With URI: User enters picture's URI to text field. Portlet can also display this picture after validate its. Finally, download this picture to picture storage.
-- User can add some information for new picture (title, tags, description)
-- By default, each of new pictures will be located in "other album" and user can move them to the others
-- Each of pictures can be located in one or more albums
+<br/>- With local file: User selects one or more picture files from his computer. Portlet must validate them and upload to his picture storage
+<br/>- With URI: User enters picture's URI to text field. Portlet can also display this picture after validate its. Finally, download this picture to picture storage.
+<br/>- User can add some information for new picture (title, tags, description)
+<br/>- By default, each of new pictures will be located in "other album" and user can move them to the others
+<br/>- Each of pictures can be located in one or more albums
 
-=== 2. Add albums
+=== 2. Add albums ===
 - User can add an album and insert some pictures into particularly album by select them
 
 === 3. Organize album and photo ===
 - Each of albums can contain pictures or other album
-- User can locate a picture into some albums or remove out of an album
-- Add, modify or delete an item (include album and picture)
+<br/>- User can locate a picture into some albums or remove out of an album
+<br/>- Add, modify or delete an item (include album and picture)
 - Share or download an item
 
 === 4. Subscribe photos from other providers like flickr ===
-
