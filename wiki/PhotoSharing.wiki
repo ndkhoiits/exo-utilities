@@ -3,7 +3,7 @@
 
 = Introduction =
 
-The Photo Sharing is a portlet that allow you to ...
+The Photo Sharing is a portlet that allow you can share some photos by upload from local or image's URI.
 
 
 = Feature list =
