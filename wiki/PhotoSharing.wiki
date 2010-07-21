@@ -1,0 +1,15 @@
+#summary One-sentence summary of this page.
+#labels Photo,Portlet
+
+= Introduction =
+
+The Photo Sharing is a portlet that allow you to ...
+
+
+= Feature list =
+
+=== 1. Upload Pictures ===
+
+=== 2. Organize album and photo ===
+
+=== 3. Subscribe photos from other providers like flickr ===
