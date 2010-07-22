@@ -36,7 +36,7 @@ import org.chromattic.api.ChromatticSession;
 
 public class TestSaveData extends AbstractTestCase
 {
-   private final String PATH = "/conf/ContainerIcon.gif";
+   private final String PATH = "/conf/test.txt";
    private File file;
    private Common common;
    
