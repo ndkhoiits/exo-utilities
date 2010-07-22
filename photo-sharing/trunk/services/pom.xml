@@ -4,11 +4,11 @@
   xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>exo.portal.utilities.photoSharing</artifactId>
+    <artifactId>exo.portal.utilities.photo-sharing</artifactId>
     <groupId>org.exoplatform.portal</groupId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-  <artifactId>exo.portal.utilities.photoSharing.service</artifactId>
+  <artifactId>exo.portal.utilities.photo-sharing.service</artifactId>
   <version>1.0-SNAPSHOT</version>
   <name>Photo sharing service</name>
   <url>http://maven.apache.org</url>
