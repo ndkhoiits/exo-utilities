@@ -32,4 +32,8 @@
 	<gadget name="UserManagement">
 		<path>/gadgets/UserManagement/UserManagement.xml</path>
 	</gadget>
+	
+	<gadget name="GateInMonitoring">
+		<path>/gadgets/GateInMonitoring/GateInMonitoring.xml</path>
+	</gadget>
 </gadgets>
