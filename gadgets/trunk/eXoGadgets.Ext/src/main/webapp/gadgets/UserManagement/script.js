@@ -17,54 +17,83 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-function getAllUsers() {
-  var url = "http://localhost:8080/portal/rest/dataManager/find/users";
-  var request =  new XMLHttpRequest() ;
-  request.open('GET', url, false) ;
-  request.setRequestHeader("Cache-Control", "max-age=86400") ;
-  request.send(null) ;
-  responseText = request.responseText ;
-  
-  renderPagesList(responseText);
+eXo = {
+		gadget : {}
+};
+
+function UserManagement() {
+	this.USER_QUERY_URL = "http://localhost:8080/portal/rest/dataManager/find/users";	
+	this.USER_DELETE_URL = "http://localhost:8080/portal/rest/dataManager/delete/users";
 }
 
-function deleteUser(userName) {
-  if(confirm('Do you want to delete this page?')) {
-    var url = "http://localhost:8080/portal/rest/dataManager/delete/users?objectId=" + encodeURIComponent(userName);        
-              
-    var request =  new XMLHttpRequest() ;
-    request.open('GET', url, false) ;
-    request.setRequestHeader("Cache-Control", "max-age=86400") ;
-    request.send(null) ;
-    
-    if("success" == request.responseText)
-      getAllUsers();
-  }     
-}
+UserManagement.prototype.init = function() {
+	var userManagement = eXo.gadget.UserManagement;
+	userManagement.registerHandler();
+	userManagement.getUsers();
+};
 
-function searchUser() {
-  var filterString = document.getElementById("SearchInput").value;
-  var searchTypeObject = document.getElementById("SearchType");
-  var searchType = searchTypeObject[searchTypeObject.selectedIndex].value;
-  
-  var url = "http://localhost:8080/portal/rest/dataManager/find/users";
-  if(filterString != "") {
-    if(searchType == "userName") {
-      url += "?userName=" + filterString;
-    } else if(searchType == "lastName") {
-      url += "?lastName=" + filterString;
-    } else if(searchType == "firstName") {
-      url += "?firstName=" + filterString;
-    } else if(searchType == "email") {
-      url += "?email=" + filterString;
+UserManagement.prototype.getUsers = function() {
+	var userManagement = eXo.gadget.UserManagement; 
+	
+	var usersURL = userManagement.USER_QUERY_URL;
+	var filterString = $("#SearchInput").val();
+  var searchType = $("#SearchType").val();
+
+  if(searchType && filterString.trim() != "") {
+  	filterString = encodeURIComponent(filterString.trim());
+  	
+  	if(searchType == "User Name") {
+  		usersURL += "?userName=" + filterString;
+    } else if(searchType == "Last Name") {
+    	usersURL += "?lastName=" + filterString;
+    } else if(searchType == "First Name") {
+    	usersURL += "?firstName=" + filterString;
+    } else if(searchType == "Email") {
+    	usersURL += "?email=" + filterString;
     }
   }
-  
-  var request =  new XMLHttpRequest() ;
-  request.open('GET', url, false) ;
-  request.setRequestHeader("Cache-Control", "max-age=86400") ;
-  request.send(null) ;
-  responseText = request.responseText ;       
+	
+	var currView = gadgets.views.getCurrentView().getName();
+  if (currView == "home") {  	
+  	userManagement.makeRequest(usersURL, userManagement.renderUsersForHome);
+  } else {  	
+  	userManagement.makeRequest(usersURL, userManagement.renderUsersForCanvas);
+  }
+};
 
-  renderPagesList(responseText);
-}
+UserManagement.prototype.renderUsersForHome = function(userData) {	
+	var usersHtml = "";
+	if (userData && userData.user) {
+		for (var i = 0; i < userData.user.length; i++) {
+			var rowClass = i % 2 == 0 ? "EvenRow" : "OddRow";
+			
+			usersHtml += "<tr style='width: 100%;' class='" + rowClass + "'>" +
+			"<td style='width: 50%;'>" + userData.user[i].userName + "</td>" +
+			"<td style='width: 50%;'><img id='" + userData.user[i].userName + 
+			"' src='/eXoGadgets.Ext/skin/image/Blank.gif' class='DeleteIcon' title='Delete user'>" +
+			"</td></tr>";									
+		}
+	}
+	$("#UserList").html(usersHtml);	
+};
+
+UserManagement.prototype.renderUsersForCanvas = function(userData) {	
+	var usersHtml = "";
+	if (userData && userData.user) {
+		for (var i = 0; i < userData.user.length; i++) {
+			var user = userData.user[i];
+			var rowClass = i % 2 == 0 ? "EvenRow" : "OddRow";
+			
+			usersHtml += "<tr style='width: 100%;' class='" + rowClass + "'>" +
+			"<td style='width: 20%;'>" + user.userName + "</td>" +
+			"<td style='width: 20%;'>" + user.lastName + "</td>" +
+			"<td style='width: 20%;'>" + user.firstName + "</td>" +
+			"<td style='width: 20%;'>" + user.email + "</td>" +
+			"<td style='width: 20%;'><img src='/eXoGadgets.Ext/skin/image/Blank.gif' " +
+			"id = " + user.userName + " class='DeleteIcon' title='Delete user'></td></tr>";							
+		}
+	}
+	$("#UserList").html(usersHtml);
+};
+
+eXo.gadget.UserManagement = new UserManagement();

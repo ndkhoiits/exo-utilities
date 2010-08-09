@@ -24,10 +24,10 @@ function GateInMonitoring() {
 	this.SERVICES_URL = "http://localhost:8080/portal/rest/management";	
 }
 
-GateInMonitoring.prototype.init = function() {
-	registerHandler();
+GateInMonitoring.prototype.init = function() {	
 	var monitor = eXo.gadget.GateInMonitoring; 
-  makeRequest(monitor.SERVICES_URL, monitor.renderServiceSelector);
+	monitor.registerHandler();
+  monitor.makeRequest(monitor.SERVICES_URL, monitor.renderServiceSelector);
 };
 
 GateInMonitoring.prototype.renderServiceSelector = function(services) {
@@ -119,27 +119,5 @@ GateInMonitoring.prototype.showMinimessage = function(jsonMessage) {
 	executeMsg.style.overflow = "auto";
 	gadgets.window.adjustHeight();
 };
-
-/**
- * @param reqUrl - String
- * @param callback - Function
- * @param sendData - Data that will be send to server 
- * @param returnType - String html/xml/json/script
- * @param reqMethod - GET/POST/PUT...
- * @return XMLHttpRequest object
- */
-function makeRequest(reqUrl, callback, sendData, returnType, reqMethod) {	
-	reqMethod = reqMethod ? reqMethod : "GET";
-	returnType = returnType ? returnType : "json";
-	
-	return $.ajax({
-					  url: reqUrl,
-					  type: reqMethod,					  
-					  success: callback,
-					  error: function() {alert("error");},
-					  data: sendData,
-					  dataType: returnType		  					  					  
-					});
-}
 
 eXo.gadget.GateInMonitoring = new GateInMonitoring();

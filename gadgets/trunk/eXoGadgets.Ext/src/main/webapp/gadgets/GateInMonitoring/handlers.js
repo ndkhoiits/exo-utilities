@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-function registerHandler() { 
+GateInMonitoring.prototype.registerHandler = function() {
 	
 	//======================Handler======================================//
 	$("#servicesSelector").change(function () {
@@ -25,9 +25,9 @@ function registerHandler() {
 	  
 	  var currView = gadgets.views.getCurrentView().getName();
 	  if (currView == "home") {
-	  	makeRequest(methodsURL, eXo.gadget.GateInMonitoring.renderMethodSelector);
+	  	eXo.gadget.GateInMonitoring.makeRequest(methodsURL, eXo.gadget.GateInMonitoring.renderMethodSelector);
 	  } else {
-	  	makeRequest(methodsURL, eXo.gadget.GateInMonitoring.renderMethodsForCanvas);
+	  	eXo.gadget.GateInMonitoring.makeRequest(methodsURL, eXo.gadget.GateInMonitoring.renderMethodsForCanvas);
 	  }
 	});
 
@@ -52,6 +52,28 @@ function registerHandler() {
 	  var param = $("form", tr).serialize();
 	  
 		var execLink = eXo.gadget.GateInMonitoring.SERVICES_URL + "/" + $("#servicesSelector").val() + "/" + methodName;
-		makeRequest(execLink, eXo.gadget.GateInMonitoring.showMinimessage, param, "json", reqMethod);
+		eXo.gadget.GateInMonitoring.makeRequest(execLink, eXo.gadget.GateInMonitoring.showMinimessage, param, "json", reqMethod);
 	});
-}
+};
+
+/**
+ * @param reqUrl - String
+ * @param callback - Function
+ * @param sendData - Data that will be send to server 
+ * @param returnType - String html/xml/json/script
+ * @param reqMethod - GET/POST/PUT...
+ * @return XMLHttpRequest object
+ */
+GateInMonitoring.prototype.makeRequest = function(reqUrl, callback, sendData, returnType, reqMethod) {	
+	reqMethod = reqMethod ? reqMethod : "GET";
+	returnType = returnType ? returnType : "json";
+	
+	return $.ajax({
+					  url: reqUrl,
+					  type: reqMethod,					  
+					  success: callback,
+					  error: function() {alert("error");},
+					  data: sendData,
+					  dataType: returnType		  					  					  
+					});
+};

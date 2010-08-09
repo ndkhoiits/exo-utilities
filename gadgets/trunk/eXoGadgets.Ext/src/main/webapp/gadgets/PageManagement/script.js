@@ -16,55 +16,81 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
+eXo = {
+		gadget : {}
+};
 
-function getAllPages() {
-  var url = "http://localhost:8080/portal/rest/dataManager/query/pages/*/*";
-  var request =  new XMLHttpRequest() ;
-  request.open('GET', url, false) ;
-  request.setRequestHeader("Cache-Control", "max-age=86400") ;
-  request.send(null) ;
-  responseText = request.responseText ;
-
-    renderPagesList(responseText);
+function PageManagement() {
+	this.PAGE_QUERY_URL = "http://localhost:8080/portal/rest/dataManager/query/pages";	
+	this.PAGE_DELETE_URL = "http://localhost:8080/portal/rest/dataManager/delete/pages";
 }
 
-function deletePage(pageId) {
-  if(confirm('Do you want to delete this page?')) {
-    var url = "http://localhost:8080/portal/rest/dataManager/delete/pages?objectId=" + encodeURIComponent(pageId);        
-              
-    var request =  new XMLHttpRequest() ;
-    request.open('GET', url, false) ;
-    request.setRequestHeader("Cache-Control", "max-age=86400") ;
-    request.send(null) ;
-    
-    if("success" == request.responseText)
-      getAllPages();
-  }     
-}
+PageManagement.prototype.init = function() {
+	var pageManagement = eXo.gadget.PageManagement;
+  pageManagement.registerHandler();
+	pageManagement.getPages();
+};
 
-function searchPage() {
-  var filterString = document.getElementById("SearchInput").value;
-  var searchTypeObject = document.getElementById("SearchType");
-  var searchType = searchTypeObject[searchTypeObject.selectedIndex].value;
-  
-  var url = "http://localhost:8080/portal/rest/dataManager/query/pages/";
-  if(filterString != "") {
+PageManagement.prototype.getPages = function() {
+	var pageManagement = eXo.gadget.PageManagement; 
+	
+	var pagesURL = pageManagement.PAGE_QUERY_URL;
+	var filterString = $("#SearchInput").val();
+  var searchType = $("#SearchType").val();
+
+  if(searchType && filterString.trim() != "") {
+  	filterString = encodeURIComponent(filterString.trim());
+
     if(searchType == "Owner id") {
-      url += "*/" + filterString;
+    	pagesURL += "/*/" + filterString;
     } else if(searchType == "Owner type") {
-      url += filterString + "/*";
-    } else {
-      url += "*/*";
+    	pagesURL += "/" + filterString + "/*";
     }
   } else {
-    url += "*/*";
+  	pagesURL += "/*/*";
   }
-  
-  var request =  new XMLHttpRequest() ;
-  request.open('GET', url, false) ;
-  request.setRequestHeader("Cache-Control", "max-age=86400") ;
-  request.send(null) ;
-  responseText = request.responseText ;       
+	
+	var currView = gadgets.views.getCurrentView().getName();
+  if (currView == "home") {  	
+  	pageManagement.makeRequest(pagesURL, pageManagement.renderPagesForHome);
+  } else {  	
+  	pageManagement.makeRequest(pagesURL, pageManagement.renderPagesForCanvas);
+  }
+};
 
-  renderPagesList(responseText);
-}
+PageManagement.prototype.renderPagesForHome = function(pageData) {	
+	var pagesHtml = "";
+	if (pageData && pageData.page) {
+		for (var i = 0; i < pageData.page.length; i++) {
+			var rowClass = i % 2 == 0 ? "EvenRow" : "OddRow";
+			
+			pagesHtml += "<tr style='width: 100%;' class='" + rowClass + "'>" +
+			"<td style='width: 50%;'>" + pageData.page[i].pageTitle + "</td>" +
+			"<td style='width: 50%;'><img id='" + pageData.page[i].pageId + 
+			"' src='/eXoGadgets.Ext/skin/image/Blank.gif' class='DeleteIcon' title='Delete page'>" +
+			"</td></tr>";											
+		}
+	}
+	$("#PageList").html(pagesHtml);	
+};
+
+PageManagement.prototype.renderPagesForCanvas = function(pageData) {	
+	var pagesHtml = "";
+	if (pageData && pageData.page) {
+		for (var i = 0; i < pageData.page.length; i++) {
+			var page = pageData.page[i];
+			var rowClass = i % 2 == 0 ? "EvenRow" : "OddRow";
+			
+			pagesHtml += "<tr style='width: 100%;' class='" + rowClass + "'>" +
+			"<td style='width: 20%;'>" + page.pageId + "</td>" +
+			"<td style='width: 20%;'>" + page.pageTitle + "</td>" +
+			"<td style='width: 20%;'>" + page.accessPermissions + "</td>" +
+			"<td style='width: 20%;'>" + page.editPermission + "</td>" +
+			"<td style='width: 20%;'><img src='/eXoGadgets.Ext/skin/image/Blank.gif' " +
+			"id = " + page.pageId + " class='DeleteIcon' title='Delete page'></td></tr>";							
+		}
+	}
+	$("#PageList").html(pagesHtml);
+};
+
+eXo.gadget.PageManagement = new PageManagement();

@@ -180,7 +180,7 @@ public class QueryManagementService implements ResourceContainer
          responseContent = "Exception in executing delete page \n" + ex.toString();
       }
       
-      return Response.created(UriBuilder.fromUri("dataManager/query").build()).entity(responseContent).type(MediaType.APPLICATION_XML).status(Response.Status.OK).build();
+      return Response.created(UriBuilder.fromUri("dataManager/query").build()).entity(responseContent).type(MediaType.TEXT_PLAIN).status(Response.Status.OK).build();
    }
    
    private Query<?> buildQuery(String dataType, String ownerType, String ownerId)

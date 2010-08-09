@@ -36,60 +36,28 @@
                 thumbnail="http://localhost:8080/eXoGadgets.Ext/skin/DefaultSkin/portletIcons/DefaultPortlet.png"
                 height="227">
       <Locale lang="ar" language_direction="rtl"/>
+      <Require feature="views"/>
    </ModulePrefs>
    <Content type="html" view="home">
       <![CDATA[		
         <link rel="stylesheet" type="text/css" href="style.css"></link>
+        <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
 	    <script type="text/javascript" src="script.js"></script>
+	    <script type="text/javascript" src="handlers.js"></script>
 		<script type="text/javascript">			
-			function renderPagesList(jsonData) {	
-			    var plTable = document.getElementById("plTable");
-				var plBody = document.getElementById("plBody");
-			    if(plBody != null && plBody != "undefined") {
-				  	plTable.removeChild(plBody);			    	
-			    }
-			    
-			    plBody = document.createElement("tbody");	
-			    plBody.setAttribute("id", "plBody");
-				plTable.appendChild(plBody);
-
-				var jsonObject = eval("(" + jsonData + ")");
-				if(jsonObject == "undefined")
-					return;
-					
-				var count = jsonObject.page.length
-				for(var i = 0; i < count; i++) {	
-					var plRow = document.createElement("tr");
-					plRow.setAttribute("style", "width:100%");	
-					plRow.setAttribute("class", i%2 ? "OddRow":"EvenRow");	
-										
-					var plCell = document.createElement("td");						
-					plCell.innerHTML = jsonObject.page[i]["pageTitle"];
-					plCell.setAttribute("style", "width:50%");						
-					plRow.appendChild(plCell);			
-					
-					plCell = document.createElement("td");	
-					pageId = jsonObject.page[i]["pageId"];
-					actionClick = "deletePage('" + pageId + "')";			
-					plCell.innerHTML =	"<img title='Delete page' class='DeleteIcon' src='/eXoGadgets.Ext/skin/image/Blank.gif' onclick=" + actionClick + " />";	
-					plCell.setAttribute("style", "width:50%");						
-					plRow.appendChild(plCell);
-					
-					plBody.appendChild(plRow);				
-				}
-			}
+			gadgets.util.registerOnLoadHandler(eXo.gadget.PageManagement.init);			
 		</script>
-		<body  onload="getAllPages();">
-			<div id="UIPageBrowser" class="UIPageBrowser">
+		<body>
+			<div id="PageManagement" class="PageManagement">
 				<div id="UIGrid" class="UIGrid">
-					<table id="plTable" cellspacing="0" border="1" style="width:100%;text-align: left;">
-						<thead id="plHead" style="width:100%">
-						  <tr style="width:100%">         
-				                    <th style="width:50%">Title</th>                                                    
-				                    <th style="width:50%">Action</th>                   
+					<table cellspacing="0" style="width:100%;text-align: left;">
+						<thead>
+						  <tr>         
+		                    <th style="width:50%">Title</th>                                                    
+		                    <th style="width:50%">Action</th>                   
 					     </tr>
 						</thead>
-						<tbody id="plBody" style="width:100%;">
+						<tbody id="PageList">
 						</tbody>
 					</table>
 				</div>
@@ -101,82 +69,34 @@
    <Content type="html" view="canvas">
       <![CDATA[
 		<link rel="stylesheet" type="text/css" href="style.css"></link>
+		<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
 	    <script type="text/javascript" src="script.js"></script>
-		<script type="text/javascript">
-			function renderPagesList(jsonData) {	
-				var plTable = document.getElementById("plTable");
-				var plBody = document.getElementById("plBody");
-			    if(plBody != null && plBody != "undefined") {
-				  	plTable.removeChild(plBody);			    	
-			    }
-			    
-			    plBody = document.createElement("tbody");	
-			    plBody.setAttribute("id", "plBody");
-				plTable.appendChild(plBody);
-				
-				var jsonObject = eval("(" + jsonData + ")");
-				if(jsonObject == "undefined")
-					return;
-					
-				var count = jsonObject.page.length
-				for(var i = 0; i < count; i++) {	
-					var plRow = document.createElement("tr");
-					plRow.setAttribute("style", "width:100%");	
-					plRow.setAttribute("class", i%2 ? "OddRow":"EvenRow");	
-					
-					var plCell = document.createElement("td");						
-					plCell.innerHTML = jsonObject.page[i]["pageId"];
-					plCell.setAttribute("style", "width:20%");	
-					pageId = plCell.innerHTML;						
-					plRow.appendChild(plCell);	
-
-					plCell = document.createElement("td");						
-					plCell.innerHTML = jsonObject.page[i]["pageTitle"];
-					plCell.setAttribute("style", "width:20%");							
-					plRow.appendChild(plCell);	
-					
-					plCell = document.createElement("td");						
-					plCell.innerHTML = jsonObject.page[i]["accessPermissions"];	
-					plCell.setAttribute("style", "width:20%");						
-					plRow.appendChild(plCell);
-
-					plCell = document.createElement("td");						
-					plCell.innerHTML = jsonObject.page[i]["editPermission"];	
-					plCell.setAttribute("style", "width:20%");						
-					plRow.appendChild(plCell);
-					
-					plCell = document.createElement("td");						
-					actionClick = "deletePage('" + pageId + "')";			
-					plCell.innerHTML =	"<img title='Delete page' class='DeleteIcon' src='/eXoGadgets.Ext/skin/image/Blank.gif' onclick=" + actionClick + " />";	
-					plCell.setAttribute("style", "width:20%");						
-					plRow.appendChild(plCell);
-					
-					plBody.appendChild(plRow);				
-				}
-			}
+		<script type="text/javascript" src="handlers.js"></script>
+		<script type="text/javascript">			
+			gadgets.util.registerOnLoadHandler(eXo.gadget.PageManagement.init);			
 		</script>
-		<body  onload="getAllPages();">
+		<body>
 		   <div class="UISearchForm" id="UISearchForm">
-				<input id="SearchInput" class="SearchInput" type="text" value="">
+				<input id="SearchInput" class="SearchInput" type="text">
 				<select class="SearchType" id="SearchType">
 					<option value="Owner id">Owner id</option>
 					<option value="Owner type">Owner type </option>
 				</select>
-				<input type="button" name="test" value="Search" onClick="searchPage();">					 
+				<input type="button" id="SearchPage" name="test" value="Search"/>					 
 			</div>
-			<div id="UIPageBrowser" class="UIPageBrowser">
+			<div id="PageManagement" class="PageManagement">
 				<div id="UIGrid" class="UIGrid">
-					<table id="plTable" cellspacing="0" border="1" style="width:100%; text-align: left;">
-						<thead id="plHead" style="width:100%">
-						  <tr style="width:100%">         
-				                    <th style="width:20%">Id</th>                    
-				                    <th style="width:20%">Title</th>                    
-				                    <th style="width:20%">Access Permission</th>                    
-				                    <th style="width:20%">Edit Permission</th>                    
-				                    <th style="width:20%">Action</th>                   
+					<table cellspacing="0" style="width:100%; text-align: left;">
+						<thead id="plHead">
+						  <tr>         
+		                    <th style="width:20%">Id</th>                    
+		                    <th style="width:20%">Title</th>                    
+		                    <th style="width:20%">Access Permission</th>                    
+		                    <th style="width:20%">Edit Permission</th>                    
+		                    <th style="width:20%">Action</th>                   
 					     </tr>
 						</thead>
-						<tbody id="plBody" style="width:100%;">
+						<tbody id="PageList">
 						</tbody>
 					</table>
 				</div>

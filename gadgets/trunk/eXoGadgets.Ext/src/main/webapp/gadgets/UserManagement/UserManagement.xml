@@ -36,61 +36,28 @@
                 thumbnail="http://localhost:8080/eXoGadgets.Ext/skin/DefaultSkin/portletIcons/UserManagement.png"                
                 height="227">
       <Locale lang="ar" language_direction="rtl"/>
+      <Require feature="views"/>
    </ModulePrefs>
    <Content type="html" view="home">
       <![CDATA[
         <link rel="stylesheet" type="text/css" href="style.css"></link>
+	    <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
 	    <script type="text/javascript" src="script.js"></script>
-		<script type="text/javascript">
-			function renderPagesList(jsonData) {	
-			    var plTable = document.getElementById("plTable");
-				var plBody = document.getElementById("plBody");
-			    if(plBody != null && plBody != "undefined") {
-				  	plTable.removeChild(plBody);			    	
-			    }
-			    
-			    plBody = document.createElement("tbody");	
-			    plBody.setAttribute("id", "plBody");
-				plTable.appendChild(plBody);
-
-				var jsonObject = eval("(" + jsonData + ")");
-				if(jsonObject == "undefined")
-					return;
-					
-				var count = jsonObject.user.length
-				for ( var i = 0; i < count ; i++ ) {		
-					var plRow = document.createElement("tr");
-					plRow.setAttribute("style", "width:100%");
-					plRow.setAttribute("class", i%2 ? "OddRow":"EvenRow");	
-										
-					var plCell = document.createElement("td");						
-					plCell.innerHTML = jsonObject.user[i]["userName"];
-					plCell.setAttribute("style", "width:50%");	
-					userName = plCell.innerHTML;					
-					plRow.appendChild(plCell);			
-					
-					plCell = document.createElement("td");	
-					actionClick = "deleteUser('" + userName + "')";			
-					plCell.innerHTML =	"<img title='Delete page' class='DeleteIcon' src='/eXoGadgets.Ext/skin/image/Blank.gif' onclick=" + actionClick + " />";	
-					plCell.setAttribute("style", "width:50%");						
-					plRow.appendChild(plCell);
-					
-					plBody.appendChild(plRow);				
-				}
-			}
-
+	    <script type="text/javascript" src="handlers.js"></script>
+		<script type="text/javascript">			
+			gadgets.util.registerOnLoadHandler(eXo.gadget.UserManagement.init);			
 		</script>
-		<body  onload="getAllUsers();">
-			<div id="UIPageBrowser" class="UIPageBrowser">
+		<body>
+			<div id="UserManagement" class="UserManagement">
 				<div class="UIGrid">
-					<table id="plTable" cellspacing="0" border="1" style="width:100%;text-align: left;">
-						<thead id="plHead" style="width:100%">
-						  <tr style="width:100%">         
-				                    <th style="width:50%">User Name</th>                                                    
-				                    <th style="width:50%">Action</th>                   
+					<table id="plTable" cellspacing="0" style="width:100%;text-align: left;">
+						<thead>
+						  <tr>         
+		                    <th style="width:50%">User Name</th>                                                    
+		                    <th style="width:50%">Action</th>                   
 					     </tr>
 						</thead>
-						<tbody id="plBody" style="width:100%;">
+						<tbody id="UserList">
 						</tbody>
 					</table>
 				</div>
@@ -102,87 +69,36 @@
    <Content type="html" view="canvas">
       <![CDATA[
         <link rel="stylesheet" type="text/css" href="style.css"></link>
+	    <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
 	    <script type="text/javascript" src="script.js"></script>
-		<style type="text/css">
-		</style>
-		<script type="text/javascript">		
-			function renderPagesList(jsonData) {	
-			    var plTable = document.getElementById("plTable");
-				var plBody = document.getElementById("plBody");
-			    if(plBody != null && plBody != "undefined") {
-				  	plTable.removeChild(plBody);			    	
-			    }
-			    
-			    plBody = document.createElement("tbody");	
-			    plBody.setAttribute("id", "plBody");
-				plTable.appendChild(plBody);
-
-				var jsonObject = eval("(" + jsonData + ")");
-				if(jsonObject == "undefined")
-					return;
-					
-				var count = jsonObject.user.length
-				for ( var i = 0; i < count; i++ ) {		
-					var plRow = document.createElement("tr");
-					plRow.setAttribute("style", "width:100%");	
-					plRow.setAttribute("class", i%2 ? "OddRow":"EvenRow");
-					
-					var plCell = document.createElement("td");						
-					plCell.innerHTML = jsonObject.user[i]["userName"];
-					plCell.setAttribute("style", "width:20%");	
-					userName = plCell.innerHTML;						
-					plRow.appendChild(plCell);	
-
-					plCell = document.createElement("td");						
-					plCell.innerHTML = jsonObject.user[i]["lastName"];
-					plCell.setAttribute("style", "width:20%");							
-					plRow.appendChild(plCell);	
-					
-					plCell = document.createElement("td");						
-					plCell.innerHTML = jsonObject.user[i]["firstName"];
-					plCell.setAttribute("style", "width:20%");						
-					plRow.appendChild(plCell);
-
-					plCell = document.createElement("td");						
-					plCell.innerHTML = jsonObject.user[i]["email"];
-					plCell.setAttribute("style", "width:20%");						
-					plRow.appendChild(plCell);
-					
-					plCell = document.createElement("td");						
-					actionClick = "deleteUser('" + userName + "')";			
-					plCell.innerHTML =	"<img title='Delete page' class='DeleteIcon' src='/eXoGadgets.Ext/skin/image/Blank.gif' onclick=" + actionClick + " />";	
-					plCell.setAttribute("style", "width:20%");						
-					plRow.appendChild(plCell);
-					
-					plBody.appendChild(plRow);				
-				}
-			}			
-			
+	    <script type="text/javascript" src="handlers.js"></script>
+		<script type="text/javascript">			
+			gadgets.util.registerOnLoadHandler(eXo.gadget.UserManagement.init);			
 		</script>
-		<body  onload="getAllUsers();">
+		<body>
 			<div class="UISearchForm" id="UISearchForm">
-				<input id="SearchInput" class="SearchInput" type="text" value="">
+				<input id="SearchInput" class="SearchInput" type="text">
 				<select class="SearchType" id="SearchType">
-					<option value="userName">User Name</option>
-					<option value="lastName">Last Name</option>
-					<option value="firstName">First Name</option>
-					<option value="email">Email</option>
+					<option>User Name</option>
+					<option>Last Name</option>
+					<option>First Name</option>
+					<option>Email</option>
 				</select>
-				<input type="button" name="test" value="Search" onClick="searchUser();">					 
+				<input type="button" id="SearchUser" value="Search">					 
 			</div>
-			<div id="UIPageBrowser" class="UIPageBrowser">
+			<div id="UserManagement" class="UserManagement">
 				<div class="UIGrid">
-					<table id="plTable" cellspacing="0" border="1" style="width:100%; text-align: left;">
-						<thead id="plHead" style="width:100%">
-						  <tr style="width:100%">         
-				                    <th style="width:20%">User Name</th>    
-				                    <th style="width:20%">Last Name</th>                 
-				                    <th style="width:20%">First Name</th>                  
-				                    <th style="width:20%">Email</th>                    
-				                    <th style="width:20%">Action</th>                   
+					<table id="plTable" cellspacing="0" style="width:100%; text-align: left;">
+						<thead id="plHead">
+						  <tr>         
+		                    <th style="width:20%">User Name</th>    
+		                    <th style="width:20%">Last Name</th>                 
+		                    <th style="width:20%">First Name</th>                  
+		                    <th style="width:20%">Email</th>                    
+		                    <th style="width:20%">Action</th>                   
 					     </tr>
 						</thead>
-						<tbody id="plBody" style="width:100%;">
+						<tbody id="UserList">
 						</tbody>
 					</table>
 				</div>
