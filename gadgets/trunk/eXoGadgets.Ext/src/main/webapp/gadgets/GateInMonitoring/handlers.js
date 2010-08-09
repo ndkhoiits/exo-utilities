@@ -16,57 +16,42 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
- $(document).ready( function() { 
+function registerHandler() { 
 	
 	//======================Handler======================================//
-	$(".home #servicesSelector").change(function () {
-	  var service = $("option:selected", this).val();
+	$("#servicesSelector").change(function () {
+	  var serviceName = $(this).val();
+	  var methodsURL = eXo.gadget.GateInMonitoring.SERVICES_URL + "/" + serviceName;
 	  
-	  //Get, render and store methods
-	  var methods = getMethods(service);
-	  $.jStorage.set('methods', methods);
-	  renderMethodsForHome(methods);
-	  
-	  gadgets.window.adjustHeight();
+	  var currView = gadgets.views.getCurrentView().getName();
+	  if (currView == "home") {
+	  	makeRequest(methodsURL, eXo.gadget.GateInMonitoring.renderMethodSelector);
+	  } else {
+	  	makeRequest(methodsURL, eXo.gadget.GateInMonitoring.renderMethodsForCanvas);
+	  }
 	});
 
-	$(".home #methodsSelector").change(function () {
-	  var method = $("option:selected", this).val();
+	$("#methodsSelector").change(function () {
+	  var methodName = $(this).val();
 
-	  var jsonData = $.jStorage.get('methods');
-	  var jsonMethod = find(jsonData, 'methods', 'name', method);
-	  renderObject('informationTable', jsonMethod, ['name', 'description' ,'method' , 'parameters']);
+	  var methodData = $(this).data('methods');
+	  var method = null;
+	  for (var i = 0; i < methodData.length; i++) {
+	  	if (methodData[i].name == methodName) {
+	  		method = methodData[i];
+	  	}
+	  }
 
-	  gadgets.window.adjustHeight();
+	  eXo.gadget.GateInMonitoring.renderMethodDetail(method);
 	});
-
-	$(".canvas #servicesSelector").change(function () {	  
-	  //Get and render current service
-	  var service = $("option:selected", this).val();
-	  renderMethodsForCanvas(service);
-	  
-	  gadgets.window.adjustHeight();
-	});
-
+	
 	$('button.ExecuteIcon').live('click', function() {
-	  var service = $('#servicesSelector').val();  
+		var tr = $(this.parentNode.parentNode);
+		var methodName = $(".methodName", tr).text().trim();
+	  var reqMethod = $(".reqMethod", tr).text().trim();
+	  var param = $("form", tr).serialize();
 	  
-	  $method = $(this).parent().parent().children().get(0).innerHTML;
-	  $httpMethod = $(this).parent().parent().children().get(1).innerHTML;
-	  $parametersTable = $(this).parent().parent().children().get(2).innerHTML;
-	  
-	  var parameters = null;	  
-	  if($parametersTable != undefined) {    
-	    parameters = getParameters($parametersTable);
-	  }
-	  
-	  //Hard code for testing reloadTemplate method, because of getting parameters value incorrectly now
-	  if(service == "templateservice" && $method == "reloadTemplate") {
-	    parameters = "templateId=par:/groovy/groovy/webui/component/UIFooterPortlet.gtmpl";
-	  }
-
-	  responseText = executeMethod(service, $method, parameters, $httpMethod)
-	  showMinimessage(responseText);
+		var execLink = eXo.gadget.GateInMonitoring.SERVICES_URL + "/" + $("#servicesSelector").val() + "/" + methodName;
+		makeRequest(execLink, eXo.gadget.GateInMonitoring.showMinimessage, param, "json", reqMethod);
 	});
-
-});
+}
