@@ -20,8 +20,8 @@ GateInMonitoring.prototype.registerHandler = function() {
 	
 	//======================Handler======================================//
 	$("#servicesSelector").change(function () {
-	  var serviceName = $(this).val();
-	  var methodsURL = eXo.gadget.GateInMonitoring.SERVICES_URL + "/" + serviceName;
+	  var serviceName = gadgets.util.unescapeString($(this).val());
+	  var methodsURL = eXo.gadget.GateInMonitoring.SERVICES_URL + "/" + encodeURIComponent(serviceName);
 	  
 	  var currView = gadgets.views.getCurrentView().getName();
 	  if (currView == "home") {
@@ -32,7 +32,7 @@ GateInMonitoring.prototype.registerHandler = function() {
 	});
 
 	$("#methodsSelector").change(function () {
-	  var methodName = $(this).val();
+	  var methodName = gadgets.util.unescapeString($(this).val());
 
 	  var methodData = $(this).data('methods');
 	  var method = null;
@@ -47,12 +47,15 @@ GateInMonitoring.prototype.registerHandler = function() {
 	
 	$('button.ExecuteIcon').live('click', function() {
 		var tr = $(this.parentNode.parentNode);
-		var methodName = $(".methodName", tr).text().trim();
-	  var reqMethod = $(".reqMethod", tr).text().trim();
+		var methodName = gadgets.util.unescapeString($(".methodName", tr).text().trim());
+	  var reqMethod = gadgets.util.unescapeString($(".reqMethod", tr).text().trim());
+	  var serviceName = gadgets.util.unescapeString($("#servicesSelector").val());
 	  var param = $("form", tr).serialize();
 	  
-		var execLink = eXo.gadget.GateInMonitoring.SERVICES_URL + "/" + $("#servicesSelector").val() + "/" + methodName;
-		eXo.gadget.GateInMonitoring.makeRequest(execLink, eXo.gadget.GateInMonitoring.showMinimessage, param, "json", reqMethod);
+		var execLink = eXo.gadget.GateInMonitoring.SERVICES_URL + "/" + 
+												encodeURIComponent(serviceName) + "/" + 
+												encodeURIComponent(methodName);
+		eXo.gadget.GateInMonitoring.makeRequest(execLink, eXo.gadget.GateInMonitoring.showMinimessage, param, "text", reqMethod);
 	});
 };
 
@@ -72,6 +75,7 @@ GateInMonitoring.prototype.makeRequest = function(reqUrl, callback, sendData, re
 					  url: reqUrl,
 					  type: reqMethod,					  
 					  success: callback,
+					  contentType: "application/x-www-form-urlencoded",
 					  error: function() {alert("error");},
 					  data: sendData,
 					  dataType: returnType		  					  					  

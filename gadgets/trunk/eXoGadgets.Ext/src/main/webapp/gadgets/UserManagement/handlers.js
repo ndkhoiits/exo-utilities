@@ -29,9 +29,10 @@ UserManagement.prototype.registerHandler = function() {
 			return;
 		}
 		var userManagement = eXo.gadget.UserManagement;
+		var id = gadgets.util.unescapeString(this.id);
 		
 		userManagement.makeRequest(userManagement.USER_DELETE_URL, userManagement.getUsers, 
-				"objectId=" + encodeURIComponent(this.id), "text");
+				"objectId=" + encodeURIComponent(id), "text");
 		alert("User Deleted");
 	});
 };
@@ -52,6 +53,7 @@ UserManagement.prototype.makeRequest = function(reqUrl, callback, sendData, retu
 					  url: reqUrl,
 					  type: reqMethod,					  
 					  success: callback,
+					  contentType: "application/x-www-form-urlencoded",
 					  error: function() {alert("error");},
 					  data: sendData,
 					  dataType: returnType		  					  					  

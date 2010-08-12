@@ -29,9 +29,10 @@ PageManagement.prototype.registerHandler = function() {
 			return;
 		}
 		var pageManagement = eXo.gadget.PageManagement;
+		var id = gadgets.util.unescapeString(this.id);
 		
 		pageManagement.makeRequest(pageManagement.PAGE_DELETE_URL, pageManagement.getPages, 
-				"objectId=" + encodeURIComponent(this.id), "text");
+				"objectId=" + encodeURIComponent(id), "text");
 		alert("Page is deleted");
 	});
 };
@@ -52,6 +53,7 @@ PageManagement.prototype.makeRequest = function(reqUrl, callback, sendData, retu
 					  url: reqUrl,
 					  type: reqMethod,					  
 					  success: callback,
+					  contentType: "application/x-www-form-urlencoded",
 					  error: function() {alert("error");},
 					  data: sendData,
 					  dataType: returnType		  					  					  

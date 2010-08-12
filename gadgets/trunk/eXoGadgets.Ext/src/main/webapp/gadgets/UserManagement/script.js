@@ -54,11 +54,13 @@ UserManagement.prototype.getUsers = function() {
   }
 	
 	var currView = gadgets.views.getCurrentView().getName();
+	var callBack;
   if (currView == "home") {  	
-  	userManagement.makeRequest(usersURL, userManagement.renderUsersForHome);
+  	callBack = userManagement.renderUsersForHome;
   } else {  	
-  	userManagement.makeRequest(usersURL, userManagement.renderUsersForCanvas);
+  	callBack = userManagement.renderUsersForCanvas;
   }
+  userManagement.makeRequest(usersURL, callBack);
 };
 
 UserManagement.prototype.renderUsersForHome = function(userData) {	
@@ -66,10 +68,11 @@ UserManagement.prototype.renderUsersForHome = function(userData) {
 	if (userData && userData.user) {
 		for (var i = 0; i < userData.user.length; i++) {
 			var rowClass = i % 2 == 0 ? "EvenRow" : "OddRow";
+			var userName = gadgets.util.escapeString(userData.user[i].userName);
 			
 			usersHtml += "<tr style='width: 100%;' class='" + rowClass + "'>" +
-			"<td style='width: 50%;'>" + userData.user[i].userName + "</td>" +
-			"<td style='width: 50%;'><img id='" + userData.user[i].userName + 
+			"<td style='width: 50%;'>" + userName + "</td>" +
+			"<td style='width: 50%;'><img id='" + userName + 
 			"' src='/eXoGadgets.Ext/skin/image/Blank.gif' class='DeleteIcon' title='Delete user'>" +
 			"</td></tr>";									
 		}
@@ -85,12 +88,12 @@ UserManagement.prototype.renderUsersForCanvas = function(userData) {
 			var rowClass = i % 2 == 0 ? "EvenRow" : "OddRow";
 			
 			usersHtml += "<tr style='width: 100%;' class='" + rowClass + "'>" +
-			"<td style='width: 20%;'>" + user.userName + "</td>" +
-			"<td style='width: 20%;'>" + user.lastName + "</td>" +
-			"<td style='width: 20%;'>" + user.firstName + "</td>" +
-			"<td style='width: 20%;'>" + user.email + "</td>" +
+			"<td style='width: 20%;'>" + gadgets.util.escapeString(user.userName) + "</td>" +
+			"<td style='width: 20%;'>" + gadgets.util.escapeString(user.lastName) + "</td>" +
+			"<td style='width: 20%;'>" + gadgets.util.escapeString(user.firstName) + "</td>" +
+			"<td style='width: 20%;'>" + gadgets.util.escapeString(user.email) + "</td>" +
 			"<td style='width: 20%;'><img src='/eXoGadgets.Ext/skin/image/Blank.gif' " +
-			"id = " + user.userName + " class='DeleteIcon' title='Delete user'></td></tr>";							
+			"id = " + gadgets.util.escapeString(user.userName) + " class='DeleteIcon' title='Delete user'></td></tr>";							
 		}
 	}
 	$("#UserList").html(usersHtml);

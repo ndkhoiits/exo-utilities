@@ -20,7 +20,9 @@ package org.exoplatform.webservice.rest;
 
 import java.util.List;
 
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
@@ -39,7 +41,9 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.rest.impl.method.DefaultMethodInvoker;
 import org.exoplatform.services.rest.resource.ResourceContainer;
+import org.exoplatform.services.rest.servlet.RestServlet;
 import org.exoplatform.webservice.rest.datamodel.PageBean;
 import org.exoplatform.webservice.rest.datamodel.PageNavigationBean;
 import org.exoplatform.webservice.rest.datamodel.UserBean;
@@ -123,9 +127,11 @@ public class QueryManagementService implements ResourceContainer
     * @return
     */
    @GET
-   @Path("/query/{dataType}/{ownerType}/{ownerId}/")
-   public Response queryPage(@PathParam("dataType") String dataType, @PathParam("ownerType") String ownerType, @PathParam("ownerId") String ownerId)
+   @Path("/query/pages/")
+   public Response queryPage(@QueryParam("ownerType") String ownerType, @QueryParam("ownerId") String ownerId)
    {
+      String dataType = "pages";
+      
       PortalContainer portalContainer = PortalContainer.getInstance();
       DataStorage dataStorage = (DataStorage)portalContainer.getComponentInstanceOfType(DataStorage.class);
       

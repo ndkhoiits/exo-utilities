@@ -33,29 +33,31 @@ PageManagement.prototype.init = function() {
 
 PageManagement.prototype.getPages = function() {
 	var pageManagement = eXo.gadget.PageManagement; 
-	
-	var pagesURL = pageManagement.PAGE_QUERY_URL;
+
 	var filterString = $("#SearchInput").val();
   var searchType = $("#SearchType").val();
-
+  var sendData;
   if(searchType && filterString.trim() != "") {
   	filterString = encodeURIComponent(filterString.trim());
 
     if(searchType == "Owner id") {
-    	pagesURL += "/*/" + filterString;
-    } else if(searchType == "Owner type") {
-    	pagesURL += "/" + filterString + "/*";
+    	sendData = "ownerType=*&" + "ownerId=" + filterString;
+    } else {
+    	sendData = "ownerType=" + filterString + "&ownerId=*";
     }
   } else {
-  	pagesURL += "/*/*";
+  	sendData = "ownerType=*&ownerId=*";
   }
 	
 	var currView = gadgets.views.getCurrentView().getName();
+	var callBack;
   if (currView == "home") {  	
-  	pageManagement.makeRequest(pagesURL, pageManagement.renderPagesForHome);
+  	callBack = pageManagement.renderPagesForHome; 
   } else {  	
-  	pageManagement.makeRequest(pagesURL, pageManagement.renderPagesForCanvas);
+  	callBack = pageManagement.renderPagesForCanvas;
   }
+  
+  pageManagement.makeRequest(pageManagement.PAGE_QUERY_URL, callBack, sendData);
 };
 
 PageManagement.prototype.renderPagesForHome = function(pageData) {	
@@ -63,10 +65,12 @@ PageManagement.prototype.renderPagesForHome = function(pageData) {
 	if (pageData && pageData.page) {
 		for (var i = 0; i < pageData.page.length; i++) {
 			var rowClass = i % 2 == 0 ? "EvenRow" : "OddRow";
+			var pageTitle = gadgets.util.escapeString(pageData.page[i].pageTitle);
+			var pageId = gadgets.util.escapeString(pageData.page[i].pageId);
 			
 			pagesHtml += "<tr style='width: 100%;' class='" + rowClass + "'>" +
-			"<td style='width: 50%;'>" + pageData.page[i].pageTitle + "</td>" +
-			"<td style='width: 50%;'><img id='" + pageData.page[i].pageId + 
+			"<td style='width: 50%;'>" + pageTitle + "</td>" +
+			"<td style='width: 50%;'><img id='" + pageId + 
 			"' src='/eXoGadgets.Ext/skin/image/Blank.gif' class='DeleteIcon' title='Delete page'>" +
 			"</td></tr>";											
 		}
@@ -82,12 +86,12 @@ PageManagement.prototype.renderPagesForCanvas = function(pageData) {
 			var rowClass = i % 2 == 0 ? "EvenRow" : "OddRow";
 			
 			pagesHtml += "<tr style='width: 100%;' class='" + rowClass + "'>" +
-			"<td style='width: 20%;'>" + page.pageId + "</td>" +
-			"<td style='width: 20%;'>" + page.pageTitle + "</td>" +
-			"<td style='width: 20%;'>" + page.accessPermissions + "</td>" +
-			"<td style='width: 20%;'>" + page.editPermission + "</td>" +
+			"<td style='width: 20%;'>" + gadgets.util.escapeString(page.pageId) + "</td>" +
+			"<td style='width: 20%;'>" + gadgets.util.escapeString(page.pageTitle) + "</td>" +
+			"<td style='width: 20%;'>" + gadgets.util.escapeString(page.accessPermissions) + "</td>" +
+			"<td style='width: 20%;'>" + gadgets.util.escapeString(page.editPermission) + "</td>" +
 			"<td style='width: 20%;'><img src='/eXoGadgets.Ext/skin/image/Blank.gif' " +
-			"id = " + page.pageId + " class='DeleteIcon' title='Delete page'></td></tr>";							
+			"id = " + gadgets.util.escapeString(page.pageId) + " class='DeleteIcon' title='Delete page'></td></tr>";							
 		}
 	}
 	$("#PageList").html(pagesHtml);

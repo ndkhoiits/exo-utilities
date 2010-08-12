@@ -36,7 +36,7 @@ GateInMonitoring.prototype.renderServiceSelector = function(services) {
 	var serviceNames = services.value;
 	var optionsHtml = "";
 	for (var i = 0; i < serviceNames.length; i++) {
-		optionsHtml += "<option>" + serviceNames[i] + "</option>";
+		optionsHtml += "<option>" + gadgets.util.escapeString(serviceNames[i]) + "</option>";
 	}
 	var servicesSelector = $("#servicesSelector"); 
 	servicesSelector.html(optionsHtml);
@@ -51,7 +51,7 @@ GateInMonitoring.prototype.renderMethodSelector = function(methodData) {
 	var methods = methodData.methods;
 	var optionsHtml = "";
 	for (var i = 0; i < methods.length; i++) {
-		optionsHtml += "<option>" + methods[i].name + "</option>";
+		optionsHtml += "<option>" + gadgets.util.escapeString(methods[i].name) + "</option>";
 	}
 	methodSelector.html(optionsHtml);			
 	methodSelector.data('methods', methods);
@@ -60,15 +60,16 @@ GateInMonitoring.prototype.renderMethodSelector = function(methodData) {
 
 GateInMonitoring.prototype.renderMethodDetail = function(method) {
 	if (!method) return;
+	var util = gadgets.util;
 	
-	$("#methodName").html(method.name);
-	$("#methodDescription").html(method.description);
-	$("#reqMethod").html(method.method);
+	$("#methodName").html(util.escapeString(method.name));
+	$("#methodDescription").html(util.escapeString(method.description));
+	$("#reqMethod").html(util.escapeString(method.method));
 	
 	var paramTable = "";
 	for (var i = 0; i < method.parameters.length; i++) {
 		var rowClass = i % 2 == 0 ? "EvenRow" : "OddRow";
-		paramTable += "<tr class='" + rowClass + "'><td>" + method.parameters[i].name + "</td></tr>";
+		paramTable += "<tr class='" + rowClass + "'><td>" + util.escapeString(method.parameters[i].name) + "</td></tr>";
 	}
 	
 	if (paramTable == "") {
@@ -81,15 +82,19 @@ GateInMonitoring.prototype.renderMethodDetail = function(method) {
 GateInMonitoring.prototype.renderMethodsForCanvas = function(methodData) {
 	var methods = methodData.methods;
 	var methodForCanvas = "";
+	var util = gadgets.util;
+	
 	for (var i = 0; i < methods.length; i++) {
 		var method = methods[i];						
+		var methodName = util.escapeString(method.name);
+		var reqMethod = util.escapeString(method.method);
 		
-		methodForCanvas += "<tr><td class='methodName'>" + method.name + "</td>" +	"<td class='reqMethod'>" + method.method + "</td>" +
+		methodForCanvas += "<tr><td class='methodName'>" + methodName + "</td>" +	"<td class='reqMethod'>" + reqMethod + "</td>" +
 												"<td><form>" + "<table style='width: 100%;'>";
 		for (var j = 0; j < method.parameters.length; j++) {
 			var rowClass = j % 2 == 0 ? "EvenRow" : "OddRow";
-			methodForCanvas += "<tr class='" + rowClass + "'><td>" + method.parameters[j].name + "</td>" +
-													"<td><input type='text' name='" + method.parameters[j].name + "'></td>" +
+			methodForCanvas += "<tr class='" + rowClass + "'><td>" + util.escapeString(method.parameters[j].name) + "</td>" +
+													"<td><input type='text' name='" + util.escapeString(method.parameters[j].name) + "'></td>" +
 													"</tr>";
 		}
 		methodForCanvas += "</table></form>" +
@@ -101,23 +106,62 @@ GateInMonitoring.prototype.renderMethodsForCanvas = function(methodData) {
 };
 
 GateInMonitoring.prototype.showMinimessage = function(jsonMessage) {
-//var message;
-//
-////BUG BUG: I don't know some results of server, such as below samples, how to fix?
-//if(jsonMessage == '{}' || jsonMessage == '{"value":[]}' || jsonMessage == "") {
-//  message = jsonMessage;
-//} else {
-//  var message = renderTable('msgTable', null, jsonMessage, 'value');
-//  if(message == undefined) {
-//    message = "Execute method successfully!";
-//  }
-//}
-
+	var parsedObj;
+	try {
+		parsedObj = gadgets.json.parse(jsonMessage);
+	} catch(e) {
+		parsedObj = jsonMessage;
+	}
+	var htmlTable = eXo.gadget.GateInMonitoring.objToTable(parsedObj).trim();
+	if (htmlTable == "" || htmlTable == "empty object") {
+		htmlTable = "Method's executed, return no result";
+	}
+	
 	var msg = new gadgets.MiniMessage("message");
-	var executeMsg = msg.createDismissibleMessage(gadgets.json.stringify(jsonMessage));
+	var executeMsg = msg.createDismissibleMessage(htmlTable);
 	executeMsg.style.height = "220px";
 	executeMsg.style.overflow = "auto";
 	gadgets.window.adjustHeight();
 };
+
+GateInMonitoring.prototype.objToTable = function(obj) {	
+	var type = typeof(obj);	
+	if (type != "object") {
+		return gadgets.util.escapeString(obj + "");
+	}
+	
+	if (!obj || $.isEmptyObject(obj) || 
+			(obj.constructor == Array && obj.length == 0)) {
+		return "empty object";
+	}
+	
+	var str = "<table>";
+	if (obj.constructor == Array) {	
+		for (var i = 0; i < obj.length; i++) {
+			str += "<tr><td>";
+			str += eXo.gadget.GateInMonitoring.objToTable(obj[i]);
+			str += "</td></tr>";
+		}		
+	} else {
+		str += "<tr>";
+		for(var prop in obj) {
+			str += "<td>";
+			str += eXo.gadget.GateInMonitoring.objToTable(prop);
+			str += "</td>";
+		}
+		str += "</tr>";
+		
+		str += "<tr>";
+		for (var prop in obj) {
+			str += "<td>";
+			str += eXo.gadget.GateInMonitoring.objToTable(obj[prop]);
+			str += "</td>";
+		}
+		str += "</tr>";
+	}
+	
+	str += "</table>";
+	return str;
+}
 
 eXo.gadget.GateInMonitoring = new GateInMonitoring();
