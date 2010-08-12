@@ -20,7 +20,8 @@ GateInMonitoring.prototype.registerHandler = function() {
 	
 	//======================Handler======================================//
 	$("#servicesSelector").change(function () {
-	  var serviceName = gadgets.util.unescapeString($(this).val());
+	  var serviceName = $(this).val();
+	  serviceName = gadgets.util.unescapeString(!serviceName ? "" : serviceName);
 	  var methodsURL = eXo.gadget.GateInMonitoring.SERVICES_URL + "/" + encodeURIComponent(serviceName);
 	  
 	  var currView = gadgets.views.getCurrentView().getName();
@@ -32,24 +33,28 @@ GateInMonitoring.prototype.registerHandler = function() {
 	});
 
 	$("#methodsSelector").change(function () {
-	  var methodName = gadgets.util.unescapeString($(this).val());
+	  var methodName = $(this).val();
+	  methodName = gadgets.util.unescapeString(!methodName ? "" : methodName);
 
 	  var methodData = $(this).data('methods');
 	  var method = null;
-	  for (var i = 0; i < methodData.length; i++) {
-	  	if (methodData[i].name == methodName) {
-	  		method = methodData[i];
-	  	}
+	  if (methodData) {
+		  for (var i = 0; i < methodData.length; i++) {
+		  	if (methodData[i].name == methodName) {
+		  		method = methodData[i];
+		  	}
+		  }
 	  }
 
 	  eXo.gadget.GateInMonitoring.renderMethodDetail(method);
 	});
 	
 	$('button.ExecuteIcon').live('click', function() {
-		var tr = $(this.parentNode.parentNode);
-		var methodName = gadgets.util.unescapeString($(".methodName", tr).text().trim());
-	  var reqMethod = gadgets.util.unescapeString($(".reqMethod", tr).text().trim());
-	  var serviceName = gadgets.util.unescapeString($("#servicesSelector").val());
+		var tr = this.parentNode.parentNode;		
+		var methodName = gadgets.util.unescapeString($(".methodName", tr).text());
+	  var reqMethod = gadgets.util.unescapeString($(".reqMethod", tr).text());
+	  var serviceName = $("#servicesSelector").val();
+	  serviceName = gadgets.util.unescapeString(!serviceName ? "" : serviceName);
 	  var param = $("form", tr).serialize();
 	  
 		var execLink = eXo.gadget.GateInMonitoring.SERVICES_URL + "/" + 

@@ -31,35 +31,43 @@ GateInMonitoring.prototype.init = function() {
 };
 
 GateInMonitoring.prototype.renderServiceSelector = function(services) {
-	if (!services || !services.value) return;
-	
-	var serviceNames = services.value;
+	var servicesSelector = $("#servicesSelector");
 	var optionsHtml = "";
-	for (var i = 0; i < serviceNames.length; i++) {
-		optionsHtml += "<option>" + gadgets.util.escapeString(serviceNames[i]) + "</option>";
-	}
-	var servicesSelector = $("#servicesSelector"); 
+	
+	if (services && services.value) {
+		var serviceNames = services.value;
+		
+		for (var i = 0; i < serviceNames.length; i++) {
+			optionsHtml += "<option>" + gadgets.util.escapeString(serviceNames[i]) + "</option>";
+		}
+	}	
+	 
 	servicesSelector.html(optionsHtml);
 	servicesSelector.change();
 };
 
 GateInMonitoring.prototype.renderMethodSelector = function(methodData) {
-	if (!methodData || !methodData.methods) return;
-	
 	var methodSelector = $(".home #methodsSelector");
-	
-	var methods = methodData.methods;
 	var optionsHtml = "";
-	for (var i = 0; i < methods.length; i++) {
-		optionsHtml += "<option>" + gadgets.util.escapeString(methods[i].name) + "</option>";
-	}
-	methodSelector.html(optionsHtml);			
+	var methods = null;
+	
+	if (methodData && methodData.methods) {
+		methods = methodData.methods;
+		
+		for (var i = 0; i < methods.length; i++) {
+			optionsHtml += "<option>" + gadgets.util.escapeString(methods[i].name) + "</option>";
+		}		
+	}	
+	
+	methodSelector.html(optionsHtml);
 	methodSelector.data('methods', methods);
 	methodSelector.change();
 };
 
 GateInMonitoring.prototype.renderMethodDetail = function(method) {
-	if (!method) return;
+	if (!method) {
+		method = {name:"", description:"", method:"", parameters:[]};
+	}
 	var util = gadgets.util;
 	
 	$("#methodName").html(util.escapeString(method.name));
@@ -76,7 +84,7 @@ GateInMonitoring.prototype.renderMethodDetail = function(method) {
 		paramTable = "<tr><td>[]</td></tr>";
 	}
 	$("#parametersTable").html(paramTable);
-	gadgets.window.adjustHeight();
+	gadgets.window.adjustHeight($("div.home").height());
 };
 
 GateInMonitoring.prototype.renderMethodsForCanvas = function(methodData) {
@@ -102,7 +110,7 @@ GateInMonitoring.prototype.renderMethodsForCanvas = function(methodData) {
 												"<td><button class='ExecuteIcon' title='Execute this method'/></td></tr>";			
 	}												
 	$("#methodsForCanvas").html(methodForCanvas);
-	gadgets.window.adjustHeight();
+	gadgets.window.adjustHeight($("div.canvas").height());
 };
 
 GateInMonitoring.prototype.showMinimessage = function(jsonMessage) {
@@ -112,7 +120,7 @@ GateInMonitoring.prototype.showMinimessage = function(jsonMessage) {
 	} catch(e) {
 		parsedObj = jsonMessage;
 	}
-	var htmlTable = eXo.gadget.GateInMonitoring.objToTable(parsedObj).trim();
+	var htmlTable = $.trim(eXo.gadget.GateInMonitoring.objToTable(parsedObj));
 	if (htmlTable == "" || htmlTable == "empty object") {
 		htmlTable = "Method's executed, return no result";
 	}

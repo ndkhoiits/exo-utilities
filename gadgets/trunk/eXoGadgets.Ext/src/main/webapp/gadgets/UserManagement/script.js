@@ -39,8 +39,8 @@ UserManagement.prototype.getUsers = function() {
 	var filterString = $("#SearchInput").val();
   var searchType = $("#SearchType").val();
 
-  if(searchType && filterString.trim() != "") {
-  	filterString = encodeURIComponent(filterString.trim());
+  if(searchType && $.trim(filterString) != "") {
+  	filterString = encodeURIComponent($.trim(filterString));
   	
   	if(searchType == "User Name") {
   		usersURL += "?userName=" + filterString;

@@ -37,8 +37,8 @@ PageManagement.prototype.getPages = function() {
 	var filterString = $("#SearchInput").val();
   var searchType = $("#SearchType").val();
   var sendData;
-  if(searchType && filterString.trim() != "") {
-  	filterString = encodeURIComponent(filterString.trim());
+  if(searchType && $.trim(filterString) != "") {
+  	filterString = encodeURIComponent($.trim(filterString));
 
     if(searchType == "Owner id") {
     	sendData = "ownerType=*&" + "ownerId=" + filterString;

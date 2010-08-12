@@ -89,7 +89,7 @@
 			<div id="UserManagement" class="UserManagement">
 				<div class="UIGrid">
 					<table id="plTable" cellspacing="0" style="width:100%; text-align: left;">
-						<thead id="plHead">
+						<thead>
 						  <tr>         
 		                    <th style="width:20%">User Name</th>    
 		                    <th style="width:20%">Last Name</th>                 

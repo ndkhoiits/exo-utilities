@@ -87,7 +87,7 @@
 			<div id="PageManagement" class="PageManagement">
 				<div id="UIGrid" class="UIGrid">
 					<table cellspacing="0" style="width:100%; text-align: left;">
-						<thead id="plHead">
+						<thead>
 						  <tr>         
 		                    <th style="width:20%">Id</th>                    
 		                    <th style="width:20%">Title</th>                    
