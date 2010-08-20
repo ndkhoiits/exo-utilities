@@ -84,7 +84,7 @@ GateInMonitoring.prototype.renderMethodDetail = function(method) {
 	}
 	paramTable += "</table>";
 	$("#parametersTable").html(paramTable);
-	gadgets.window.adjustHeight();
+	gadgets.window.adjustHeight($("body").height());
 };
 
 GateInMonitoring.prototype.renderMethodsForCanvas = function(methodData) {
@@ -133,7 +133,7 @@ GateInMonitoring.prototype.renderMethodsForCanvas = function(methodData) {
 												"</td></tr>";	
 	}												
 	$("#methodsForCanvas").html(methodForCanvas);
-	gadgets.window.adjustHeight();
+	gadgets.window.adjustHeight($("body").height());
 };
 
 GateInMonitoring.prototype.showMinimessage = function(jsonMessage) {
@@ -152,7 +152,7 @@ GateInMonitoring.prototype.showMinimessage = function(jsonMessage) {
 	var executeMsg = msg.createDismissibleMessage(htmlTable);
 	executeMsg.style.height = "100px";
 	executeMsg.style.overflow = "auto";	
-	gadgets.window.adjustHeight();
+	gadgets.window.adjustHeight($("body").height());
 };
 
 GateInMonitoring.prototype.objToTable = function(obj) {	
