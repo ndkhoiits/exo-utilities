@@ -47,7 +47,7 @@ GateInMonitoring.prototype.renderServiceSelector = function(services) {
 };
 
 GateInMonitoring.prototype.renderMethodSelector = function(methodData) {
-	var methodSelector = $(".home #methodsSelector");
+	var methodSelector = $("#methodsSelector");
 	var optionsHtml = "";
 	var methods = null;
 	
@@ -74,17 +74,17 @@ GateInMonitoring.prototype.renderMethodDetail = function(method) {
 	$("#methodDescription").html(util.escapeString(method.description));
 	$("#reqMethod").html(util.escapeString(method.method));
 	
-	var paramTable = "";
+	var paramTable = "<table>";
 	for (var i = 0; i < method.parameters.length; i++) {
-		var rowClass = i % 2 == 0 ? "EvenRow" : "OddRow";
-		paramTable += "<tr class='" + rowClass + "'><td>" + util.escapeString(method.parameters[i].name) + "</td></tr>";
+		paramTable += "<tr><td>" + util.escapeString(method.parameters[i].name) + "</td></tr>";
 	}
 	
-	if (paramTable == "") {
-		paramTable = "<tr><td>[]</td></tr>";
+	if (paramTable == "<table>") {
+		paramTable += "<tr><td>[]</td></tr>";
 	}
+	paramTable += "</table>";
 	$("#parametersTable").html(paramTable);
-	gadgets.window.adjustHeight($("div.home").height());
+	gadgets.window.adjustHeight();
 };
 
 GateInMonitoring.prototype.renderMethodsForCanvas = function(methodData) {
@@ -97,20 +97,43 @@ GateInMonitoring.prototype.renderMethodsForCanvas = function(methodData) {
 		var methodName = util.escapeString(method.name);
 		var reqMethod = util.escapeString(method.method);
 		
-		methodForCanvas += "<tr><td class='methodName'>" + methodName + "</td>" +	"<td class='reqMethod'>" + reqMethod + "</td>" +
-												"<td><form>" + "<table style='width: 100%;'>";
+		var rowClass = i % 2 == 0 ? "EvenRow" : "OddRow";
+		methodForCanvas += "<tr " + rowClass + ">" +
+													"<td class='methodName'>" + methodName + "</td>" +	
+													"<td class='reqMethod'>" + reqMethod + "</td>" +
+												  "<td><form>";
 		for (var j = 0; j < method.parameters.length; j++) {
-			var rowClass = j % 2 == 0 ? "EvenRow" : "OddRow";
-			methodForCanvas += "<tr class='" + rowClass + "'><td>" + util.escapeString(method.parameters[j].name) + "</td>" +
-													"<td><input type='text' name='" + util.escapeString(method.parameters[j].name) + "'></td>" +
-													"</tr>";
+			methodForCanvas +=  "<div class='SkinID'>" + util.escapeString(method.parameters[j].name) + " " +
+													"<input type='text' name='" + util.escapeString(method.parameters[j].name) + "'>" +
+													"</div>";
 		}
-		methodForCanvas += "</table></form>" +
-												"</td>" +
-												"<td><button class='ExecuteIcon' title='Execute this method'/></td></tr>";			
+		methodForCanvas += "</form></td>" +
+												"<td>"+
+													"<div class='UIAction'> " +
+														"<table class='ActionContainer'>" +
+															"<tbody>" +
+																"<tr>" +
+																	"<td>" +
+																		"<div class='ActionButton GadgetStyle'>" +
+																			"<div class='ButtonLeft'>" +
+																				"<div class='ButtonRight'>" +
+																					"<div class='ButtonMiddle'>" +
+																						"<div class='Icon SmallGroup16x16Icon'>" +
+																							"Execute" +
+																						"</div>" +
+																					"</div>" +
+																				"</div>" +
+																			"</div>" +
+																		"</div>" +
+																	"</td>" +
+																"</tr>" +
+															"</tbody>" +
+														"</table>" +
+													"</div>" +
+												"</td></tr>";	
 	}												
 	$("#methodsForCanvas").html(methodForCanvas);
-	gadgets.window.adjustHeight($("div.canvas").height());
+	gadgets.window.adjustHeight();
 };
 
 GateInMonitoring.prototype.showMinimessage = function(jsonMessage) {
@@ -125,10 +148,10 @@ GateInMonitoring.prototype.showMinimessage = function(jsonMessage) {
 		htmlTable = "Method's executed, return no result";
 	}
 	
-	var msg = new gadgets.MiniMessage("message");
+	var msg = new gadgets.MiniMessage("GateInMonitoring", document.getElementById("resultMessage"));
 	var executeMsg = msg.createDismissibleMessage(htmlTable);
-	executeMsg.style.height = "220px";
-	executeMsg.style.overflow = "auto";
+	executeMsg.style.height = "100px";
+	executeMsg.style.overflow = "auto";	
 	gadgets.window.adjustHeight();
 };
 
@@ -170,6 +193,6 @@ GateInMonitoring.prototype.objToTable = function(obj) {
 	
 	str += "</table>";
 	return str;
-}
+};
 
 eXo.gadget.GateInMonitoring = new GateInMonitoring();

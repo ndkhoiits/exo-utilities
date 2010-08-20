@@ -50,48 +50,59 @@
 			gadgets.util.registerOnLoadHandler(eXo.gadget.GateInMonitoring.init);
 		</script>
 		<body>
-			<div class="home">
-				<div id="servicesArea" align="center">
-					GateIn Service:<select id="servicesSelector"></select>
-				</div>
-				
-				<div id="methodsArea" align="center">
-					Method:<select id="methodsSelector"></select>
-				</div>
-				
-				<div id="informationArea" class="UIGrid">
-					<table id="informationTable" style="width: 100%;">
-						<thead>
-							<tr>
-								<td>Name</td>
-								<td>Value</td>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>name</td>
-								<td id="methodName"></td>
-							</tr>
-							<tr>
-								<td>description</td>
-								<td id="methodDescription"></td>
-							</tr>
-							<tr>
-								<td>method</td>
-								<td id="reqMethod"></td>
-							</tr>
-							<tr>
-								<td>parameters</td>
-								<td>
-									<table id="parametersTable" style="width: 100%;">
-									</table>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>			
-		</body>
+			<div class="UIGadget">
+			  <div class="TopGadget">
+				<table cellspacing="0">
+					<tbody>
+						<tr>
+							<td><div class="Text">GateIn Service</div></td>
+							<td>
+								<select id="servicesSelector"></select>							
+							</td>
+						</tr>
+						<tr>
+							<td><div class="Text">Method</div></td>
+							<td>
+								<select id="methodsSelector"></select>							
+							</td>
+						</tr>
+					</tbody>
+				</table> 
+			</div>
+			
+			<div class="GadgetGrid">
+				<table cellspacing="0" class="UIGrid">
+					<thead>
+						<tr>
+							<th class="FieldComponent Text">Name</th>
+							<th class="Text">Value</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="EvenRow">
+							<td><div class="Text">Name</div></td>
+							<td><div class="Text" id="methodName"></div></td>
+						</tr>
+						<tr class="OddRow">
+							<td><div class="Text">Description</div></td>
+							<td><div class="Text" id="methodDescription"></div></td>
+						</tr>
+						<tr class="EvenRow">
+							<td><div class="Text">Method</div></td>
+							<td><div class="Text" id="reqMethod"></div></td>
+						</tr>
+						<tr class="OddRow">
+							<td><div class="Text">Parameters</div></td>
+							<td>
+							  <div class="SkinID Text" id="parametersTable"></div>
+							</td>
+						</tr>
+					</tbody>
+				</table> 
+				<!--End UIGrid-->
+			</div>									
+		</div>					
+    </body>
 	]]>
    </Content>
    <Content type="html" view="canvas">
@@ -104,26 +115,37 @@
 			gadgets.util.registerOnLoadHandler(eXo.gadget.GateInMonitoring.init);
 		</script>
 		<body>
-			<div class="canvas">
-				<div id="servicesArea" align="center">
-					GateIn Service:<select id="servicesSelector"></select>
-				</div>
-				
-				<div id="informationArea" class="UIGrid">
-					<table id="informationTable" style="width: 100%;">
-						<thead>
-							<tr>
-								<td style="width: 0%;">Name</td>
-								<td style="width: 25%;">Method</td>
-								<td style="width: 50%;">Parameters</td>
-								<td style="width: 75%;">Action</td>
-							</tr>
-						</thead>
-						<tbody id="methodsForCanvas">
-						</tbody>
-					</table>
-				</div>
-			</div>			
+			<div class="UIGadget UIGadgetCanvas">
+			  <div class="TopGadget TopGadgetCanvas">
+				<table cellspacing="0">
+					<tbody>
+						<tr>
+							<td><div class="Text">GateIn Service</div></td>
+							<td>
+								<select id="servicesSelector"></select>							
+							</td>
+						</tr>
+					</tbody>
+				</table> 
+			</div>
+			
+			<div class="GadgetGrid">
+				<table cellspacing="0" class="UIGrid">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Method</th>
+							<th>Parameters</th>
+							<th>Action</th>				
+						</tr>
+					</thead>
+					<tbody id="methodsForCanvas"></tbody>
+				</table> 
+				<!--End UIGrid-->
+			</div>		
+			
+			<div id="resultMessage"></div>					
+		  </div>		
 		</body>
 	]]>
    </Content>

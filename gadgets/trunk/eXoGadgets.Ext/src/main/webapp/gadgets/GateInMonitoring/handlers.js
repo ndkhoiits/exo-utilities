@@ -49,7 +49,7 @@ GateInMonitoring.prototype.registerHandler = function() {
 	  eXo.gadget.GateInMonitoring.renderMethodDetail(method);
 	});
 	
-	$('button.ExecuteIcon').live('click', function() {
+	$('.UIAction').live('click', function() {
 		var tr = this.parentNode.parentNode;		
 		var methodName = gadgets.util.unescapeString($(".methodName", tr).text());
 	  var reqMethod = gadgets.util.unescapeString($(".reqMethod", tr).text());
