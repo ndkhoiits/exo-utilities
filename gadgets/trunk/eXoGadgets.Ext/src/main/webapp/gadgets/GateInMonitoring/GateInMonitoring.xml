@@ -42,7 +42,7 @@
    </ModulePrefs>
    <Content type="html" view="home">
       <![CDATA[
-        <link rel="stylesheet" type="text/css" href="style.css"></link>
+        <link rel="stylesheet" type="text/css" href="style/home.css"></link>
         <script src="jquery-1.4.2.min.js" type="text/javascript"></script>		
 		<script src="script.js" type="text/javascript"></script>	
 		<script src="handlers.js" type="text/javascript"></script>
@@ -53,29 +53,27 @@
 			<div class="UIGadget">
 			  <div class="TopGadget">
 				<table cellspacing="0">
-					<tbody>
-						<tr>
-							<td><div class="Text">GateIn Service</div></td>
-							<td>
-								<select id="servicesSelector"></select>							
-							</td>
-						</tr>
-						<tr>
-							<td><div class="Text">Method</div></td>
-							<td>
-								<select id="methodsSelector"></select>							
-							</td>
-						</tr>
-					</tbody>
+					<tr>
+						<td><div class="Text">GateIn Service</div></td>
+						<td>
+							<select id="servicesSelector"></select>							
+						</td>
+					</tr>
+					<tr>
+						<td><div class="Text">Method</div></td>
+						<td>
+							<select id="methodsSelector"></select>							
+						</td>
+					</tr>
 				</table> 
-			</div>
+			  </div>
 			
-			<div class="GadgetGrid">
+			  <div class="GadgetGrid">
 				<table cellspacing="0" class="UIGrid">
 					<thead>
 						<tr>
-							<th class="FieldComponent Text">Name</th>
-							<th class="Text">Value</th>
+							<th class="TableHeader FieldComponent Text">Name</th>
+							<th class="TableHeader Text">Value</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -93,7 +91,7 @@
 						</tr>
 						<tr class="OddRow">
 							<td><div class="Text">Parameters</div></td>
-							<td>
+							<td id="test">
 							  <div class="SkinID Text" id="parametersTable"></div>
 							</td>
 						</tr>
@@ -107,7 +105,7 @@
    </Content>
    <Content type="html" view="canvas">
       <![CDATA[
-        <link rel="stylesheet" type="text/css" href="style.css"></link>
+        <link rel="stylesheet" type="text/css" href="style/canvas.css"></link>
         <script src="jquery-1.4.2.min.js"></script>     
 		<script src="script.js"></script>
 		<script src="handlers.js"></script>
@@ -115,9 +113,10 @@
 			gadgets.util.registerOnLoadHandler(eXo.gadget.GateInMonitoring.init);
 		</script>
 		<body>
-			<div class="UIGadget UIGadgetCanvas">
-			  <div class="TopGadget TopGadgetCanvas">
-				<table cellspacing="0">
+		
+		  <div class="UIGadget">
+			<div class="TopGadget">
+				<table cellspacing="0" style="margin: 0px auto;">
 					<tbody>
 						<tr>
 							<td><div class="Text">GateIn Service</div></td>
@@ -129,24 +128,24 @@
 				</table> 
 			</div>
 			
-			<div class="GadgetGrid">
+			<div class="GadgetGrid GadgetGmCanvas GadgetGmCanvasMessage">
 				<table cellspacing="0" class="UIGrid">
 					<thead>
 						<tr>
-							<th>Name</th>
-							<th>Method</th>
-							<th>Parameters</th>
-							<th>Action</th>				
+							<th class="FieldComponent">Name</th>
+							<th class="FieldComponent">Method</th>
+							<th class="FieldComponent">Parameters</th>
+							<th>Action</th>
 						</tr>
 					</thead>
 					<tbody id="methodsForCanvas"></tbody>
 				</table> 
 				<!--End UIGrid-->
-			</div>		
+			</div>
 			
-			<div id="resultMessage"></div>					
-		  </div>		
-		</body>
+			<div class="BoxFile" id="resultMessage"></div>
+		</div>	
+	  </body>
 	]]>
    </Content>
 </Module>

@@ -1,27 +1,13 @@
-/**
- * Copyright (C) 2009 eXo Platform SAS.
- * 
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 2.1 of
- * the License, or (at your option) any later version.
- * 
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
- */
-
 body {
 	font-family: Lucida Sans, Arial, Verdana, sans-serif;
 	margin: 0px;
 	font-size: 12px;
 	color: #626262;
+}
+
+body, th, td, div, span, p {
+	font-family: Lucida Sans,Arial,Verdana,sans-serif;	
+	font-size: 11px;
 }
 
 img {
@@ -57,28 +43,12 @@ a {
 /******* UIGadget ********/
 
 .UIGadget {
-	width: 269px;
-	border: 1px solid #c3c3c3;
-	padding: 10px;
-	margin: 0px auto;
-    font-size: 11px;	
-}
-
-.UIGadgetCanvas {
-	width: auto;
+	font-size: 11px;
+	width: 100%;
 }
 
 .TopGadget {
 	padding: 10px;
-}
-
-.TopGadgetCanvas {
-	margin-left: 339px;
-}
-
-.Text {
-	font-family: Lucida Sans, Arial, Verdana, sans-serif;
-	font-size: 11px;
 }
 
 .TopGadget table td {
@@ -88,7 +58,7 @@ a {
 .TopGadget table .Text {
 	font-weight: bold;
 	color: #636363;
-	padding-right: 10px;	
+	padding-right: 10px;
 }
 
 .TopGadget table select {
@@ -125,10 +95,6 @@ a {
 	border-bottom: 1px solid #fff;
 }
 
-.GadgetGrid .UIGrid tbody {
-padding-bottom:1px;
-}
-
 .GadgetGrid .UIGrid .EvenRow {
 	background: #F5F5F5;
 }
@@ -141,7 +107,6 @@ padding-bottom:1px;
 	border-left: 1px solid #ebebeb;
 	border-right: 1px solid #ebebeb;
 	border-top: 1px solid #ebebeb;
-	height: 20px;
 	line-height: 20px;
 	padding: 4px 10px;
 }
@@ -169,55 +134,25 @@ padding-bottom:1px;
 	white-space: nowrap;
 }
 
+/******* Button *******/
 
-.UIAction {
-	padding: 10px 0px;
-}
-
-.UIAction .ActionContainer {
-	margin: auto;
-	width: auto;
-}
-
-.UIAction .GadgetStyle {
-	float: none;
-	margin: auto;
-}
-
-.UIAction .GadgetStyle .ButtonLeft {
+.GadgetGrid .GadgetStyle .ButtonLeft {
 	background: url("images/GadgetStyle.gif") no-repeat left top;
 	padding-left: 2px;
 }
 
-.UIAction .GadgetStyle .ButtonRight {
+.GadgetGrid .GadgetStyle .ButtonRight {
 	background: url("images/GadgetStyle.gif") no-repeat right top;
 	padding-right: 2px;
 }
 
-.UIAction .GadgetStyle .ButtonMiddle {
+.GadgetGrid .GadgetStyle .ButtonMiddle {
 	background: url("images/GadgetStyle.gif") repeat-x left -24px;
 	line-height: 24px;
 	padding: 0px 10px;
 }
 
-.UIAction .GadgetStyle .ButtonMiddle a {
+.GadgetGrid .GadgetStyle .ButtonMiddle a {
 	color: #636363;
 	font-weight: bold;
-}
-
-/*********MiniMessage***********/
-.mmlib_table {
-  width: 100%;
-  font: bold 9px arial,sans-serif;
-  background-color: #ffffff;
-  border-collapse: separate;
-  border-spacing: 0px;
-  padding: 1px 0px;
-}
-
-.mmlib_xlink {
-  font: normal 1.1em arial,sans-serif;
-  font-weight: bold;
-  color: #0000cc;
-  cursor: pointer;
 }

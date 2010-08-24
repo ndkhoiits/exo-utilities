@@ -21,7 +21,7 @@ eXo = {
 };
 
 function GateInMonitoring() {
-	this.SERVICES_URL = "http://localhost:8080/portal/rest/management";	
+	this.SERVICES_URL = "http://192.168.1.85:8080/portal/rest/management";	
 }
 
 GateInMonitoring.prototype.init = function() {	
@@ -59,6 +59,10 @@ GateInMonitoring.prototype.renderMethodSelector = function(methodData) {
 		}		
 	}	
 	
+	if (optionsHtml == "") {
+		optionsHtml = "<option></option>";
+	}
+	
 	methodSelector.html(optionsHtml);
 	methodSelector.data('methods', methods);
 	methodSelector.change();
@@ -84,10 +88,18 @@ GateInMonitoring.prototype.renderMethodDetail = function(method) {
 	}
 	paramTable += "</table>";
 	$("#parametersTable").html(paramTable);
-	gadgets.window.adjustHeight($("body").height());
+	if ($.browser.safari) {
+		gadgets.window.adjustHeight($("body").height());
+	} else {
+		gadgets.window.adjustHeight();
+	}	
 };
 
 GateInMonitoring.prototype.renderMethodsForCanvas = function(methodData) {
+	if (!methodData || !methodData.methods) {
+		return;
+	}
+	
 	var methods = methodData.methods;
 	var methodForCanvas = "";
 	var util = gadgets.util;
@@ -98,9 +110,9 @@ GateInMonitoring.prototype.renderMethodsForCanvas = function(methodData) {
 		var reqMethod = util.escapeString(method.method);
 		
 		var rowClass = i % 2 == 0 ? "EvenRow" : "OddRow";
-		methodForCanvas += "<tr " + rowClass + ">" +
-													"<td class='methodName'>" + methodName + "</td>" +	
-													"<td class='reqMethod'>" + reqMethod + "</td>" +
+		methodForCanvas += "<tr class='" + rowClass + "'>" +
+													"<td><div class='Text methodName'>" + methodName + "</div></td>" +	
+													"<td><div class='Text reqMethod'>" + reqMethod + "</div></td>" +
 												  "<td><form>";
 		for (var j = 0; j < method.parameters.length; j++) {
 			methodForCanvas +=  "<div class='SkinID'>" + util.escapeString(method.parameters[j].name) + " " +
@@ -109,31 +121,24 @@ GateInMonitoring.prototype.renderMethodsForCanvas = function(methodData) {
 		}
 		methodForCanvas += "</form></td>" +
 												"<td>"+
-													"<div class='UIAction'> " +
-														"<table class='ActionContainer'>" +
-															"<tbody>" +
-																"<tr>" +
-																	"<td>" +
-																		"<div class='ActionButton GadgetStyle'>" +
-																			"<div class='ButtonLeft'>" +
-																				"<div class='ButtonRight'>" +
-																					"<div class='ButtonMiddle'>" +
-																						"<div class='Icon SmallGroup16x16Icon'>" +
-																							"Execute" +
-																						"</div>" +
-																					"</div>" +
-																				"</div>" +
-																			"</div>" +
-																		"</div>" +
-																	"</td>" +
-																"</tr>" +
-															"</tbody>" +
-														"</table>" +
+													"<div class='ActionButton GadgetStyle FL'>" +
+														"<div class='ButtonLeft'>" +
+															"<div class='ButtonRight'>" +
+																"<div class='ButtonMiddle'>" +
+																	"Execute" +
+																"</div>" +
+															"</div>" +
+														"</div>" +
 													"</div>" +
 												"</td></tr>";	
+				
 	}												
 	$("#methodsForCanvas").html(methodForCanvas);
-	gadgets.window.adjustHeight($("body").height());
+	if ($.browser.safari) {
+		gadgets.window.adjustHeight($("body").height());
+	} else {
+		gadgets.window.adjustHeight();
+	}	
 };
 
 GateInMonitoring.prototype.showMinimessage = function(jsonMessage) {
@@ -152,7 +157,22 @@ GateInMonitoring.prototype.showMinimessage = function(jsonMessage) {
 	var executeMsg = msg.createDismissibleMessage(htmlTable);
 	executeMsg.style.height = "100px";
 	executeMsg.style.overflow = "auto";	
-	gadgets.window.adjustHeight($("body").height());
+	if ($.browser.safari) {
+		gadgets.window.adjustHeight($("body").height());
+	} else {
+		gadgets.window.adjustHeight();
+	}	
+	$(".mmlib_xlink").each(
+			function() {
+				$(this.parentNode).attr("style","vertical-align: top");
+				$(this).html("");
+			}
+	);
+	$(".mmlib_table .UIGrid").each(
+			function() {
+				$(this.parentNode).attr("valign","top");
+			}
+	);
 };
 
 GateInMonitoring.prototype.objToTable = function(obj) {	
@@ -166,19 +186,20 @@ GateInMonitoring.prototype.objToTable = function(obj) {
 		return "empty object";
 	}
 	
-	var str = "<table>";
+	var str = "<table cellspacing='0' class='UIGrid'>";
 	if (obj.constructor == Array) {	
 		for (var i = 0; i < obj.length; i++) {
-			str += "<tr><td>";
+			var rowClass = i % 2 == 0 ? "EvenRow" : "OddRow";
+			str += "<tr class='" + rowClass + "'><td><div class='Text'>";
 			str += eXo.gadget.GateInMonitoring.objToTable(obj[i]);
-			str += "</td></tr>";
+			str += "</div></td></tr>";
 		}		
 	} else {
 		str += "<tr>";
 		for(var prop in obj) {
-			str += "<td>";
+			str += "<th>";
 			str += eXo.gadget.GateInMonitoring.objToTable(prop);
-			str += "</td>";
+			str += "</th>";
 		}
 		str += "</tr>";
 		
