@@ -49,7 +49,8 @@ GateInMonitoring.prototype.registerHandler = function() {
 	  eXo.gadget.GateInMonitoring.renderMethodDetail(method);
 	});
 	
-	$('.ActionButton').live('click', function() {
+	$('.ActionButton').live('click', function(event) {
+		event.preventDefault();
 		var tr = this.parentNode.parentNode;		
 		var methodName = gadgets.util.unescapeString($(".methodName", tr).text());
 	  var reqMethod = gadgets.util.unescapeString($(".reqMethod", tr).text());
@@ -85,5 +86,5 @@ GateInMonitoring.prototype.makeRequest = function(reqUrl, callback, sendData, re
 					  data: sendData,
 					  dataType: returnType,
 					  beforeSend: function(xhr) {xhr.setRequestHeader("Cache-Control", "no-cache");} 
-					});
+					});	
 };

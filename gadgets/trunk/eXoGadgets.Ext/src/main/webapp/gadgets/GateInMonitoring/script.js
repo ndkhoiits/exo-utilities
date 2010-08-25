@@ -21,7 +21,7 @@ eXo = {
 };
 
 function GateInMonitoring() {
-	this.SERVICES_URL = "http://192.168.1.85:8080/portal/rest/management";	
+	this.SERVICES_URL = "http://localhost:8080/portal/rest/management";	
 }
 
 GateInMonitoring.prototype.init = function() {	
@@ -125,7 +125,7 @@ GateInMonitoring.prototype.renderMethodsForCanvas = function(methodData) {
 														"<div class='ButtonLeft'>" +
 															"<div class='ButtonRight'>" +
 																"<div class='ButtonMiddle'>" +
-																	"Execute" +
+																	"<a href='#'>Execute</a>" +
 																"</div>" +
 															"</div>" +
 														"</div>" +
@@ -138,7 +138,7 @@ GateInMonitoring.prototype.renderMethodsForCanvas = function(methodData) {
 		gadgets.window.adjustHeight($("body").height());
 	} else {
 		gadgets.window.adjustHeight();
-	}	
+	}			
 };
 
 GateInMonitoring.prototype.showMinimessage = function(jsonMessage) {
