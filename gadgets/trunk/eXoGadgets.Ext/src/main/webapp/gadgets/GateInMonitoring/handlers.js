@@ -85,6 +85,8 @@ GateInMonitoring.prototype.makeRequest = function(reqUrl, callback, sendData, re
 					  error: function() {alert("error");},
 					  data: sendData,
 					  dataType: returnType,
-					  beforeSend: function(xhr) {xhr.setRequestHeader("Cache-Control", "no-cache");} 
+					  beforeSend: function(xhr) {
+					  	xhr.setRequestHeader("If-Modified-Since", "Thu, 1 Jan 1970 00:00:00 GMT");
+					  } 
 					});	
 };
