@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<portlet-app
+    xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"
+    version="1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd
+                        http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">
+
+    <portlet>
+        <description>Write here a short description about your portlet.</description>
+        <portlet-name>SystemConfigPortlet</portlet-name>
+        <display-name>exoconfig Portlet</display-name>
+
+        <portlet-class>org.exoplatform.sysconfig.component.SystemConfigPortlet</portlet-class>
+
+		<init-param>
+			<description>developing config param</description>
+			<name>config-param</name>
+			<value>exo.product.developing;gatein.jcr.datasource.dialect;gatein.jcr.datasource.driver;gatein.jcr.datasource.url;gatein.jcr.datasource.username;gatein.jcr.datasource.password</value>
+		</init-param>
+
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>VIEW</portlet-mode>
+        </supports>
+        <supported-locale>en</supported-locale>
+
+        <portlet-info>
+            <title>System configuration portlet</title>
+            <short-title>system config</short-title>
+            <keywords>exoconfig</keywords>
+        </portlet-info>
+    </portlet>
+</portlet-app>
