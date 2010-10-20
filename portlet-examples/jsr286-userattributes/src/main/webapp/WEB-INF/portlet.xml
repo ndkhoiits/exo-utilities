@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portlet-app version="1.0" xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd">
+   <portlet>
+      <portlet-name>JSR286</portlet-name>
+      <display-name>JSR 286 User Attributes</display-name>
+      <portlet-class>org.exoplatform.portal.utilities.portletexamples.portlet.UserAttributeExamplePortlet</portlet-class>
+      <supports>
+         <mime-type>text/html</mime-type>
+         <portlet-mode>VIEW</portlet-mode>
+      </supports>
+      <portlet-info>
+         <title>JSR 286 Portlet</title>
+         <short-title>JSR286</short-title>
+         <keywords>exo-utilities</keywords>
+      </portlet-info>
+   </portlet>
+   
+   <user-attribute>
+      <description>The first name</description>
+      <name>user.name.given</name>
+   </user-attribute>
+   
+   <user-attribute>
+      <description>The last name</description>
+      <name>user.name.family</name>
+   </user-attribute>
+   
+   <user-attribute>
+      <description>User gender</description>
+      <name>user.gender</name>
+   </user-attribute>
+</portlet-app>
