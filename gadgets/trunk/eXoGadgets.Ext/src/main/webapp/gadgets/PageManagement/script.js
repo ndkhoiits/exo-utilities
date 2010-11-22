@@ -21,8 +21,8 @@ eXo = {
 };
 
 function PageManagement() {
-	this.PAGE_QUERY_URL = "http://localhost:8080/portal/rest/dataManager/query/pages";	
-	this.PAGE_DELETE_URL = "http://localhost:8080/portal/rest/dataManager/delete/pages";
+	this.PAGE_QUERY_URL = "http://localhost:8080/oauthservice/rest/dataManager/query/pages";	
+	this.PAGE_DELETE_URL = "http://localhost:8080/oauthservice/rest/dataManager/delete/pages";
 }
 
 PageManagement.prototype.init = function() {
@@ -60,22 +60,37 @@ PageManagement.prototype.getPages = function() {
   pageManagement.makeRequest(pageManagement.PAGE_QUERY_URL, callBack, sendData);
 };
 
-PageManagement.prototype.renderPagesForHome = function(pageData) {	
-	var pagesHtml = "";
-	if (pageData && pageData.page) {
-		for (var i = 0; i < pageData.page.length; i++) {
-			var rowClass = i % 2 == 0 ? "EvenRow" : "OddRow";
-			var pageTitle = gadgets.util.escapeString(pageData.page[i].pageTitle);
-			var pageId = gadgets.util.escapeString(pageData.page[i].pageId);
-			
-			pagesHtml += "<tr style='width: 100%;' class='" + rowClass + "'>" +
-			"<td style='width: 50%;'>" + pageTitle + "</td>" +
-			"<td style='width: 50%;'><img id='" + pageId + 
-			"' src='/eXoGadgets.Ext/skin/image/Blank.gif' class='DeleteIcon' title='Delete page'>" +
-			"</td></tr>";											
-		}
-	}
-	$("#PageList").html(pagesHtml);	
+PageManagement.prototype.renderPagesForHome = function(response) {
+    if (response.oauthApprovalUrl) {
+        var personalize = document.getElementById('personalize');
+        personalize.href = response.oauthApprovalUrl;
+        showOneSection('approval');
+      } else if (response.data) {        
+        var pageData = response.data;
+        var pagesHtml = "";
+        if (pageData && pageData.page) {
+            for (var i = 0; i < pageData.page.length; i++) {
+                var rowClass = i % 2 == 0 ? "EvenRow" : "OddRow";
+                var pageTitle = gadgets.util.escapeString(pageData.page[i].pageTitle);
+                var pageId = gadgets.util.escapeString(pageData.page[i].pageId);
+                
+                pagesHtml += "<tr style='width: 100%;' class='" + rowClass + "'>" +
+                "<td style='width: 50%;'>" + pageTitle + "</td>" +
+                "<td style='width: 50%;'><img id='" + pageId + 
+                "' src='/eXoGadgets.Ext/skin/image/Blank.gif' class='DeleteIcon' title='Delete page'>" +
+                "</td></tr>";                                           
+            }
+        }
+        $("#PageList").html(pagesHtml); 
+        
+        showOneSection('main');
+      } else {
+        var main = document.getElementById('main');
+        var whoops = document.createTextNode('Something went wrong');
+        main.appendChild(whoops);
+        showOneSection('main');
+      }	
+	
 };
 
 PageManagement.prototype.renderPagesForCanvas = function(pageData) {	

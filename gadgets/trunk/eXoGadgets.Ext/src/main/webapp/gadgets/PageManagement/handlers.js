@@ -45,17 +45,36 @@ PageManagement.prototype.registerHandler = function() {
  * @param reqMethod - GET/POST/PUT...
  * @return XMLHttpRequest object
  */
-PageManagement.prototype.makeRequest = function(reqUrl, callback, sendData, returnType, reqMethod) {	
-	reqMethod = reqMethod ? reqMethod : "GET";
-	returnType = returnType ? returnType : "json";
-	
-	return $.ajax({
-					  url: reqUrl,
-					  type: reqMethod,					  
-					  success: callback,
-					  contentType: "application/x-www-form-urlencoded",
-					  error: function() {alert("error");},
-					  data: sendData,
-					  dataType: returnType		  					  					  
-					});
+//PageManagement.prototype.makeRequest = function(reqUrl, callback, sendData, returnType, reqMethod) {	
+//	reqMethod = reqMethod ? reqMethod : "GET";
+//	returnType = returnType ? returnType : "json";
+//	
+//	return $.ajax({
+//					  url: reqUrl,
+//					  type: reqMethod,					  
+//					  success: callback,
+//					  contentType: "application/x-www-form-urlencoded",
+//					  error: function() {alert("error");},
+//					  data: sendData,
+//					  dataType: returnType		  					  					  
+//					});
+//};
+
+PageManagement.prototype.makeRequest = function(reqUrl, callback, sendData, returnType, reqMethod) {    
+    reqMethod = reqMethod ? reqMethod : "GET";
+    returnType = returnType ? returnType : "json";
+    var params = {};
+    params[gadgets.io.RequestParameters.CONTENT_TYPE] = returnType;
+    params[gadgets.io.RequestParameters.AUTHORIZATION] = gadgets.io.AuthorizationType.OAUTH;
+    params[gadgets.io.RequestParameters.OAUTH_SERVICE_NAME] = "exo1";
+    params[gadgets.io.RequestParameters.OAUTH_USE_TOKEN] = "always";
+    params[gadgets.io.RequestParameters.METHOD] = reqMethod;
+    
+    if(reqMethod == "POST" || reqMethod == "post") {//need to change condition
+        params[gadgets.io.RequestParameters.POST_DATA] = sendData;
+    }
+  
+    gadgets.io.makeRequest(reqUrl, callback, params);
+        
+    //Set error
 };
