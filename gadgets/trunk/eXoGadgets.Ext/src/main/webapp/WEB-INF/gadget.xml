@@ -28,6 +28,10 @@
     <gadget name="PageManagement">
 		<path>/gadgets/PageManagement/PageManagement.xml</path>
 	</gadget>
+
+    <gadget name="PageManagement">
+		<path>/gadgets/PageManagement/PageManagement.xml</path>
+	</gadget>
 	
 	<gadget name="UserManagement">
 		<path>/gadgets/UserManagement/UserManagement.xml</path>
