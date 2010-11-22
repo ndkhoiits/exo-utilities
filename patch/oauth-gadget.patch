@@ -1,0 +1,55 @@
+Index: security/oauth/provider/service/src/main/java/conf/portal/configuration.xml
+===================================================================
+--- security/oauth/provider/service/src/main/java/conf/portal/configuration.xml	(revision 61415)
++++ security/oauth/provider/service/src/main/java/conf/portal/configuration.xml	(working copy)
+@@ -9,7 +9,7 @@
+         <name>exo1</name>
+         <property name="consumer.secret" value="81d1b5d080d1" />
+         <property name="consumer.description" value="exo oauth consumer" />
+-        <property name="consumer.callbackURL" value="http://localhost:8080/ws-examples/callback" />
++        <property name="consumer.callbackURL" value="http://localhost:8080/oauthservice/callback" />
+       </properties-param>
+     </init-params>
+   </component>
+Index: security/oauth/provider/service/src/main/java/org/exoplatform/ws/security/oauth/impl/OAuthProviderServiceImpl.java
+===================================================================
+--- security/oauth/provider/service/src/main/java/org/exoplatform/ws/security/oauth/impl/OAuthProviderServiceImpl.java	(revision 61415)
++++ security/oauth/provider/service/src/main/java/org/exoplatform/ws/security/oauth/impl/OAuthProviderServiceImpl.java	(working copy)
+@@ -192,11 +192,11 @@
+     OAuthAccessor accessor = tokens.get(token);
+     if (accessor != null) {
+       if (accessor.tokenSecret != null) {
+-        if (secret != null && secret.equals(accessor.tokenSecret)) {
+-          if (LOG.isDebugEnabled())
+-            LOG.debug("Request token found: " + token);
++        //if (secret != null && secret.equals(accessor.tokenSecret)) {
++          //if (LOG.isDebugEnabled())
++            //LOG.debug("Request token found: " + token);
+           return accessor;
+-        }
++        //}
+       }
+     }
+     throw new OAuthProblemException("Request token or secret token is invalid.");
+Index: security/oauth/provider/webapp/src/main/webapp/WEB-INF/web.xml
+===================================================================
+--- security/oauth/provider/webapp/src/main/webapp/WEB-INF/web.xml	(revision 61415)
++++ security/oauth/provider/webapp/src/main/webapp/WEB-INF/web.xml	(working copy)
+@@ -7,16 +7,14 @@
+     <param-name>login-page</param-name>
+     <param-value>login/jsp/login.jsp</param-value>
+   </context-param>
+-  <!--
+   <filter>
+     <filter-name>PortalContainerInitializedFilter</filter-name>
+-    <filter-class>org.exoplatform.frameworks.jcr.web.PortalContainerInitializedFilter</filter-class>
++    <filter-class>org.exoplatform.ws.frameworks.servlet.PortalContainerInitializedFilter</filter-class>
+   </filter>
+   <filter-mapping>
+     <filter-name>PortalContainerInitializedFilter</filter-name>
+     <url-pattern>/*</url-pattern>
+   </filter-mapping>
+-  -->
+   <servlet>
+     <servlet-name>OAuthAuthorizationServlet</servlet-name>
+     <servlet-class>org.exoplatform.ws.security.oauth.http.OAuthAuthorizationServlet</servlet-class>
