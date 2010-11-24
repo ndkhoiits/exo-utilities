@@ -4,14 +4,14 @@
    xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
    <modelVersion>4.0.0</modelVersion>
    <parent>
-      <artifactId>oauth-parent</artifactId>
-      <groupId>exo.portal.component.oauth</groupId>
+      <artifactId>oauth-examples-parent</artifactId>
+      <groupId>net.oauth.example</groupId>
       <version>1.0</version>
    </parent>
-   <groupId>exo.portal.component.oauth</groupId>
-   <artifactId>oauth-gadget</artifactId>
+   <groupId>net.oauth.example</groupId>
+   <artifactId>oauth-example-gadget</artifactId>
    <version>1.0</version>
-   <name>oauth-gadget</name>
+   <name>oauth-example-gadget</name>
    <url>http://maven.apache.org</url>
    <packaging>war</packaging>
    <build>

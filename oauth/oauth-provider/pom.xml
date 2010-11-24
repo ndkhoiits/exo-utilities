@@ -2,34 +2,35 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>exo.portal.component.oauth</groupId>
-    <artifactId>oauth-parent</artifactId>
+    <groupId>net.oauth.example</groupId>
+    <artifactId>oauth-examples-parent</artifactId>
     <version>1.0</version>
   </parent>
-  <artifactId>oauth-provider-parent</artifactId>
-  <packaging>pom</packaging>
+  <artifactId>oauth-example-provider</artifactId>
+  <packaging>war</packaging>
   <name>OAuth::Examples::Provider webapp</name>
-  <modules>
-      <module>service</module>
-      <module>webapp</module>
-   </modules>
-   <build>
-      <plugins>
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <configuration>
-               <source>1.5</source>
-               <target>1.5</target>
-            </configuration>
-         </plugin>
-      </plugins>
-   </build>
-   <repositories>
-      <repository>
-         <id>oauth</id>
-         <name>oAuth Repository</name>
-         <url>http://oauth.googlecode.com/svn/code/maven</url>
-      </repository>
-   </repositories>
+  <dependencies>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>2.5</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>net.oauth</groupId>
+      <artifactId>oauth-core</artifactId>
+      <version>20090531</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <finalName>oauth-provider</finalName>
+    <resources>
+      <resource>
+        <directory>src/main/java</directory>
+        <includes>
+          <include>**/*.properties</include>
+        </includes>
+      </resource>
+    </resources>
+  </build>
 </project>
