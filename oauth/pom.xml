@@ -9,6 +9,7 @@
    <modules>
       <module>oauth-provider</module>
       <module>oauth-gadget</module>
+      <module>sample-rest-service</module>
    </modules>
    <build>
       <plugins>

@@ -84,7 +84,7 @@
     // gadget as a link that the user clicks to begin the approval process.
     function fetchData() {
       var params = {};
-      url = "http://localhost:8080/oauth-provider/echo";
+      url = "http://localhost:8080/oauth-provider/rest/SimpleRest/hello/lambkin";
       params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.TEXT;
       params[gadgets.io.RequestParameters.AUTHORIZATION] = gadgets.io.AuthorizationType.OAUTH;
       params[gadgets.io.RequestParameters.OAUTH_SERVICE_NAME] = "myKey";
