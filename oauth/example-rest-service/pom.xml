@@ -7,10 +7,9 @@
    </parent>
 
    <modelVersion>4.0.0</modelVersion>
-   <groupId>trongtt.examples</groupId>
-   <artifactId>sample-rest-service</artifactId>
+   <groupId>org.exoplatform.oauth</groupId>
+   <artifactId>example-rest-service</artifactId>
    <packaging>jar</packaging>
-   <version>1.0-SNAPSHOT</version>
    <repositories>
       <repository>
          <id>jboss-public-repository-group</id>

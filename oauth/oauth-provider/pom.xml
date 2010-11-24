@@ -2,8 +2,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>net.oauth.example</groupId>
-    <artifactId>oauth-examples-parent</artifactId>
+    <groupId>org.exoplatform.oauth</groupId>
+    <artifactId>parent-pom</artifactId>
     <version>1.0</version>
   </parent>
   <artifactId>oauth-provider</artifactId>
