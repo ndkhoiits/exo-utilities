@@ -16,6 +16,13 @@
 
 package net.oauth.example.provider.servlets;
 
+import net.oauth.OAuth;
+import net.oauth.OAuthAccessor;
+import net.oauth.OAuthConsumer;
+import net.oauth.OAuthMessage;
+import net.oauth.example.provider.core.ExoOAuthProvider;
+import net.oauth.server.OAuthServlet;
+
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -24,13 +31,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import net.oauth.OAuth;
-import net.oauth.OAuthAccessor;
-import net.oauth.OAuthConsumer;
-import net.oauth.OAuthMessage;
-import net.oauth.example.provider.core.SampleOAuthProvider;
-import net.oauth.server.OAuthServlet;
 
 /**
  * Request token request handler
@@ -44,7 +44,7 @@ public class RequestTokenServlet extends HttpServlet {
         super.init(config);
         // nothing at this point
         try{
-            SampleOAuthProvider.loadConsumers(config);
+            ExoOAuthProvider.loadConsumers(config);
         }catch(IOException e){
             throw new ServletException(e.getMessage());
         }
@@ -68,10 +68,10 @@ public class RequestTokenServlet extends HttpServlet {
         try {
             OAuthMessage requestMessage = OAuthServlet.getMessage(request, null);
             
-            OAuthConsumer consumer = SampleOAuthProvider.getConsumer(requestMessage);
+            OAuthConsumer consumer = ExoOAuthProvider.getConsumer(requestMessage);
             
             OAuthAccessor accessor = new OAuthAccessor(consumer);
-            SampleOAuthProvider.VALIDATOR.validateMessage(requestMessage, accessor);
+            ExoOAuthProvider.VALIDATOR.validateMessage(requestMessage, accessor);
             {
                 // Support the 'Variable Accessor Secret' extension
                 // described in http://oauth.pbwiki.com/AccessorSecret
@@ -81,7 +81,7 @@ public class RequestTokenServlet extends HttpServlet {
                 }
             }
             // generate request_token and secret
-            SampleOAuthProvider.generateRequestToken(accessor);
+            ExoOAuthProvider.generateRequestToken(accessor);
             
             response.setContentType("text/plain");
             OutputStream out = response.getOutputStream();
@@ -91,7 +91,7 @@ public class RequestTokenServlet extends HttpServlet {
             out.close();
             
         } catch (Exception e){
-            SampleOAuthProvider.handleException(e, request, response, true);
+            ExoOAuthProvider.handleException(e, request, response, true);
         }
         
     }

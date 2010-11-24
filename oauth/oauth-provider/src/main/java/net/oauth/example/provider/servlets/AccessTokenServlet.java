@@ -16,6 +16,8 @@
 
 package net.oauth.example.provider.servlets;
 
+import net.oauth.example.provider.core.ExoOAuthProvider;
+
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -29,7 +31,6 @@ import net.oauth.OAuth;
 import net.oauth.OAuthAccessor;
 import net.oauth.OAuthMessage;
 import net.oauth.OAuthProblemException;
-import net.oauth.example.provider.core.SampleOAuthProvider;
 import net.oauth.server.OAuthServlet;
 
 /**
@@ -61,8 +62,8 @@ public class AccessTokenServlet extends HttpServlet {
         try{
             OAuthMessage requestMessage = OAuthServlet.getMessage(request, null);
             
-            OAuthAccessor accessor = SampleOAuthProvider.getAccessor(requestMessage);
-            SampleOAuthProvider.VALIDATOR.validateMessage(requestMessage, accessor);
+            OAuthAccessor accessor = ExoOAuthProvider.getAccessor(requestMessage);
+            ExoOAuthProvider.VALIDATOR.validateMessage(requestMessage, accessor);
             
             // make sure token is authorized
             if (!Boolean.TRUE.equals(accessor.getProperty("authorized"))) {
@@ -70,7 +71,7 @@ public class AccessTokenServlet extends HttpServlet {
                 throw problem;
             }
             // generate access token and secret
-            SampleOAuthProvider.generateAccessToken(accessor);
+            ExoOAuthProvider.generateAccessToken(accessor);
             
             response.setContentType("text/plain");
             OutputStream out = response.getOutputStream();
@@ -80,7 +81,7 @@ public class AccessTokenServlet extends HttpServlet {
             out.close();
             
         } catch (Exception e){
-            SampleOAuthProvider.handleException(e, request, response, true);
+            ExoOAuthProvider.handleException(e, request, response, true);
         }
     }
 
