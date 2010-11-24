@@ -21,7 +21,7 @@
          <short-title>Annotated Portlet</short-title>
       </portlet-info>
    </portlet>
-   
+
    <portlet>
       <description>A sample portlet shows demo with Window State</description>
       <portlet-name>WindowStatePortlet</portlet-name>
@@ -41,7 +41,7 @@
          <short-title>Window State Portlet</short-title>
       </portlet-info>
    </portlet>
-   
+
    <portlet>
       <description>Show CSS style definitions visually</description>
       <portlet-name>CSSDefinitionsPortlet</portlet-name>
@@ -60,7 +60,7 @@
          <short-title>CSS Style</short-title>
       </portlet-info>
    </portlet>
-   
+
    <portlet>
       <description>A sample portlet for showing the setting markup head elements feature</description>
       <portlet-name>SettingMarkupHeadElementPortlet</portlet-name>
@@ -80,11 +80,11 @@
          <short-title>Markup headers</short-title>
       </portlet-info>
    </portlet>
-   
+
    <portlet>
       <portlet-name>SharePublicRenderParametersPortlet</portlet-name>
       <display-name>Share Public Render Parameters Portlet</display-name>
-      <portlet-class>t3.samples.portlets.renderparameters.SharingPublicRenderParametersPortlet</portlet-class>
+      <portlet-class>t3.samples.portlets.parameters.SharingPublicRenderParametersPortlet</portlet-class>
 
       <supports>
          <mime-type>text/html</mime-type>
@@ -97,14 +97,14 @@
          <title>Implemented Portlet by Annotation</title>
          <short-title>Annotated Portlet</short-title>
       </portlet-info>
-      
+
       <supported-public-render-parameter>zip-id</supported-public-render-parameter>
    </portlet>
- 
+
    <portlet>
       <portlet-name>ReceivePublicRenderParametersPortlet</portlet-name>
       <display-name>Receive Public Render Parameters Portlet</display-name>
-      <portlet-class>t3.samples.portlets.renderparameters.ReceivingPublicRenderParametersPortlet</portlet-class>
+      <portlet-class>t3.samples.portlets.parameters.ReceivingPublicRenderParametersPortlet</portlet-class>
 
       <supports>
          <mime-type>text/html</mime-type>
@@ -117,10 +117,29 @@
          <title>Implemented Portlet by Annotation</title>
          <short-title>Annotated Portlet</short-title>
       </portlet-info>
-      
+
       <supported-public-render-parameter>zip-id</supported-public-render-parameter>
    </portlet>
- 
+
+   <portlet>
+      <description>A sample portlet for showing usage of Portlet URL property</description>
+      <portlet-name>URLPropertySamplePortlet</portlet-name>
+      <display-name>URL Property Sample Portlet</display-name>
+      <portlet-class>t3.samples.portlets.properties.URLPropertySamplePortlet</portlet-class>
+
+      <supports>
+         <mime-type>text/html</mime-type>
+         <portlet-mode>VIEW</portlet-mode>
+      </supports>
+
+      <supported-locale>en</supported-locale>
+
+      <portlet-info>
+         <title>URL Property Sample Portlet</title>
+         <short-title>URL Property</short-title>
+      </portlet-info>
+   </portlet>
+
    <public-render-parameter>
       <identifier>zip-id</identifier>
       <qname xmlns:x="http://sun.com/params">x:zip</qname>
