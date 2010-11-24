@@ -6,7 +6,7 @@
     <artifactId>oauth-examples-parent</artifactId>
     <version>1.0</version>
   </parent>
-  <artifactId>oauth-example-provider</artifactId>
+  <artifactId>oauth-provider</artifactId>
   <packaging>war</packaging>
   <name>OAuth::Examples::Provider webapp</name>
   <dependencies>
