@@ -8,7 +8,7 @@
    <name>OAuth::Examples::Parent POM</name>
    <modules>
       <module>oauth-provider</module>
-      <module>oauth-gadget</module>
+      <module>sample-oauth-gadget</module>
       <module>sample-rest-service</module>
    </modules>
    <build>
