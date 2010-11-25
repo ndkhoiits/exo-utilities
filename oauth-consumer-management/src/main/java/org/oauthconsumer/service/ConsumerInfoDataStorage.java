@@ -38,7 +38,7 @@ public class ConsumerInfoDataStorage
          (GadgetConsumerInfoService)container.getComponentInstance(GadgetConsumerInfoService.class);
       try
       {
-         service.addConsumerInfo1(consumerKey, consumerSecret, keyTypeStr, callbackURL, gadgetURIStr, serviceName);
+         service.addConsumerInfo(consumerKey, consumerSecret, keyTypeStr, callbackURL, gadgetURIStr, serviceName);
       }
       catch (URISyntaxException exp)
       {
