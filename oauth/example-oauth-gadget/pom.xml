@@ -12,4 +12,8 @@
    <version>1.0</version>
    <url>http://maven.apache.org</url>
    <packaging>war</packaging>
+   
+   <build>
+      <finalName>example-oauth-gadget</finalName>
+   </build>
 </project>

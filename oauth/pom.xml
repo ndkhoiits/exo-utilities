@@ -7,7 +7,7 @@
    <version>1.0</version>
    <name>OAuth::Examples::Parent POM</name>
    <modules>
-      <module>oauth-provider</module>
+      <module>exo-oauth-provider</module>
       <module>example-oauth-gadget</module>
       <module>example-rest-service</module>
    </modules>

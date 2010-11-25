@@ -46,8 +46,8 @@
       <servlet-class>net.oauth.example.provider.servlets.RequestTokenServlet</servlet-class>
    </servlet>
    <servlet>
-      <servlet-name>AuthorizationServlet</servlet-name>
-      <servlet-class>net.oauth.example.provider.servlets.AuthorizationServlet</servlet-class>
+      <servlet-name>ExoAuthorizationServlet</servlet-name>
+      <servlet-class>net.oauth.example.provider.servlets.ExoAuthorizationServlet</servlet-class>
    </servlet>
    <servlet>
       <servlet-name>AccessTokenServlet</servlet-name>
@@ -68,7 +68,7 @@
       <url-pattern>/request_token</url-pattern>
    </servlet-mapping>
    <servlet-mapping>
-      <servlet-name>AuthorizationServlet</servlet-name>
+      <servlet-name>ExoAuthorizationServlet</servlet-name>
       <url-pattern>/authorize</url-pattern>
    </servlet-mapping>
    <servlet-mapping>
