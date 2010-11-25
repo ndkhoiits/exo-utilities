@@ -4,9 +4,9 @@
     <Require feature="locked-domain"/>
     <OAuth>
       <Service name="myKey">
-        <Access url="http://localhost:8080/oauth-provider/access_token" method="GET" />
-        <Request url="http://localhost:8080/oauth-provider/request_token" method="GET" />
-        <Authorization url="http://localhost:8080/oauth-provider/authorize" method="GET" />
+        <Access url="http://localhost:8080/exo-oauth-provider/access_token" method="GET" />
+        <Request url="http://localhost:8080/exo-oauth-provider/request_token" method="GET" />
+        <Authorization url="http://localhost:8080/exo-oauth-provider/authorize" method="GET" />
       </Service>
     </OAuth>
   </ModulePrefs>
@@ -84,7 +84,7 @@
     // gadget as a link that the user clicks to begin the approval process.
     function fetchData() {
       var params = {};
-      url = "http://localhost:8080/oauth-provider/rest/SimpleRest/hello/lambkin";
+      url = "http://localhost:8080/exo-oauth-provider/rest/SimpleRest/hello/lambkin";
       params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.TEXT;
       params[gadgets.io.RequestParameters.AUTHORIZATION] = gadgets.io.AuthorizationType.OAUTH;
       params[gadgets.io.RequestParameters.OAUTH_SERVICE_NAME] = "myKey";
