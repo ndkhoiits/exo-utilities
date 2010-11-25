@@ -29,7 +29,7 @@ import java.net.URISyntaxException;
  * @author <a href="mailto:khoi.nguyen@exoplatform.com">Nguyen Duc Khoi</a>  
  * Nov 24, 2010
  */
-public class StorageConsumerInfo
+public class ConsumerInfoDataStorage
 {
    public void addKey(String consumerKey, String consumerSecret, String keyTypeStr, String callbackURL, String gadgetURIStr, String serviceName)
    {

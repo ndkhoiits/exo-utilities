@@ -19,7 +19,7 @@
 
 package org.oauthconsumer.portlet;
 
-import org.oauthconsumer.service.StorageConsumerInfo;
+import org.oauthconsumer.service.ConsumerInfoDataStorage;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
@@ -75,7 +75,7 @@ public class OauthConsumerPortlet extends GenericPortlet
       String gadgetURIStr = request.getParameter("gadget_uri");
       String serviceName = request.getParameter("service_name");
 
-      StorageConsumerInfo oAuthStore = new StorageConsumerInfo();
+      ConsumerInfoDataStorage oAuthStore = new ConsumerInfoDataStorage();
       oAuthStore.addKey(consumerKey, consumerSecret, keyTypeStr, callbackURL, gadgetURIStr, serviceName);
    }
 }
