@@ -22,12 +22,19 @@ package net.oauth.example.provider.servlets;
 import net.oauth.OAuth;
 import net.oauth.OAuthAccessor;
 import net.oauth.OAuthMessage;
+import net.oauth.OAuthException;
 import net.oauth.example.provider.core.ExoOAuthProvider;
 import net.oauth.server.OAuthServlet;
 
 import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.web.AbstractHttpServlet;
+import org.exoplatform.services.security.Authenticator;
+import org.exoplatform.services.security.Credential;
+import org.exoplatform.services.security.Identity;
+import org.exoplatform.services.security.PasswordCredential;
+import org.exoplatform.services.security.UsernameCredential;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -79,20 +86,43 @@ public class ExoAuthorizationServlet extends AbstractHttpServlet
 
       try
       {
-         OAuthMessage requestMessage = OAuthServlet.getMessage(request, null);
-
-         OAuthAccessor accessor = ExoOAuthProvider.getAccessor(requestMessage);
-
-         String userId = request.getParameter("userId");
-         if (userId == null)
-         {
-            sendToAuthorizePage(request, response, accessor);
+         OAuthMessage oauthMessage = OAuthServlet.getMessage(request, null);
+         OAuthAccessor accessor = ExoOAuthProvider.getAccessor(oauthMessage);
+         // Accessor can has only request token and secret token.
+         // If current accessor was marked as authorized in some other way.
+         if (Boolean.TRUE.equals(accessor.getProperty("authorized"))) {           
+           returnToConsumer(request, response, accessor);
+           return;
          }
-         // set userId in accessor and mark it as authorized
-         ExoOAuthProvider.markAsAuthorized(accessor, userId);
+
+         // do authentication
+         String username = request.getParameter("username");
+         String password = request.getParameter("password");
+         if (username == null || username.length() == 0
+             || password == null || password.length() == 0) {
+           sendToAuthorizePage(request, response, accessor);
+           return;
+         }
+         
+         Identity identity = null;         
+         ExoContainer container = ExoContainerContext.getCurrentContainer(); 
+         Authenticator authenticator = (Authenticator) container.getComponentInstanceOfType(Authenticator.class);
+         Credential[] credentials = new Credential[] { new UsernameCredential(username),
+             new PasswordCredential(password) };
+         
+         try {
+           String userId = authenticator.validateUser(credentials);
+           identity = authenticator.createIdentity(userId);
+         } catch (Exception e) {
+           e.printStackTrace();
+           sendToAuthorizePage(request, response, accessor);
+           return;
+         }
+         
+         // authentication success, authorize token 
+         ExoOAuthProvider.markAsAuthorized(accessor, identity);
 
          returnToConsumer(request, response, accessor);
-
       }
       catch (Exception e)
       {
@@ -108,12 +138,10 @@ public class ExoAuthorizationServlet extends AbstractHttpServlet
       {
          callback = "none";
       }
-      String consumer_description = (String)accessor.consumer.getProperty("description");
-      request.setAttribute("CONS_DESC", consumer_description);
-      request.setAttribute("CALLBACK", callback);
-      request.setAttribute("TOKEN", accessor.requestToken);
+      request.setAttribute("oauth_callback", callback);
+      request.setAttribute("oauth_token", accessor.requestToken);
       request.getRequestDispatcher //
-         ("/authorize.jsp").forward(request, response);
+         ("login/jsp/login.jsp").forward(request, response);
 
    }
 

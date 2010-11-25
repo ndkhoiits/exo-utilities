@@ -28,6 +28,7 @@ import net.oauth.SimpleOAuthValidator;
 import net.oauth.server.OAuthServlet;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.exoplatform.services.security.Identity;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -170,13 +171,14 @@ public class ExoOAuthProvider
    /**
     * Set the access token 
     */
-   public static synchronized void markAsAuthorized(OAuthAccessor accessor, String userId) throws OAuthException
+   public static synchronized void markAsAuthorized(OAuthAccessor accessor, Identity identity) throws OAuthException
    {
 
       // first remove the accessor from cache
       ALL_TOKENS.remove(accessor);
 
-      accessor.setProperty("user", userId);
+      accessor.setProperty("user", identity.getUserId());
+      accessor.setProperty("user_roles", identity.getRoles());
       accessor.setProperty("authorized", Boolean.TRUE);
 
       // update token in local cache
