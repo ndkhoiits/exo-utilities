@@ -28,7 +28,7 @@
     </dependency>
   </dependencies>
   <build>
-    <finalName>oauth-provider</finalName>
+    <finalName>exo-oauth-provider</finalName>
     <resources>
       <resource>
         <directory>src/main/java</directory>
