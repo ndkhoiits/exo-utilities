@@ -6,7 +6,7 @@
       <Service name="myKey">
         <Access url="http://localhost:8080/exo-oauth-provider/access_token" method="GET" />
         <Request url="http://localhost:8080/exo-oauth-provider/request_token" method="GET" />
-        <Authorization url="http://localhost:8080/exo-oauth-provider/authorize" method="GET" />
+        <Authorization url="http://localhost:8080/exo-oauth-provider/authorize?oauth_callback=http://localhost:8080/eXoGadgetServer/gadgets/oauthcallback" method="GET" />
       </Service>
     </OAuth>
   </ModulePrefs>
