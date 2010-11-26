@@ -54,13 +54,13 @@ import javax.servlet.http.HttpServletResponse;
 
 public class ExoOAuthProviderService implements Startable
 {
-   private ExoCache<String, Object> tokens;
-   
+   private ExoCache<String, OAuthAccessor> tokens;
+
    public ExoOAuthProviderService(CacheService cService)
    {
       tokens = cService.getCacheInstance(ExoOAuthProviderService.class.getSimpleName());
    }
-   
+
    public static final OAuthValidator VALIDATOR = new SimpleOAuthValidator();
 
    private static final Map<String, OAuthConsumer> ALL_CONSUMERS = Collections
@@ -155,21 +155,21 @@ public class ExoOAuthProviderService implements Startable
    /**
     * Get the access token and token secret for the given oauth_token. 
     */
-   public static synchronized OAuthAccessor getAccessor(OAuthMessage requestMessage) throws IOException,
-      OAuthProblemException
+   public OAuthAccessor getAccessor(OAuthMessage requestMessage) throws IOException, OAuthProblemException
    {
 
       // try to load from local cache if not throw exception
       String consumer_token = requestMessage.getToken();
       OAuthAccessor accessor = null;
-      for (OAuthAccessor a : ExoOAuthProviderService.ALL_TOKENS)
+
+      OAuthAccessor a = tokens.get(consumer_token);
+      if (a != null)
       {
          if (a.requestToken != null)
          {
             if (a.requestToken.equals(consumer_token))
             {
                accessor = a;
-               break;
             }
          }
          else if (a.accessToken != null)
@@ -177,11 +177,10 @@ public class ExoOAuthProviderService implements Startable
             if (a.accessToken.equals(consumer_token))
             {
                accessor = a;
-               break;
             }
          }
       }
-
+      
       if (accessor == null)
       {
          OAuthProblemException problem = new OAuthProblemException("token_expired");
@@ -198,14 +197,14 @@ public class ExoOAuthProviderService implements Startable
    {
 
       // first remove the accessor from cache
-      ALL_TOKENS.remove(accessor);
+      //      ALL_TOKENS.remove(accessor);
 
       accessor.setProperty("user", identity.getUserId());
       accessor.setProperty("user_roles", identity.getRoles());
       accessor.setProperty("authorized", Boolean.TRUE);
 
       // update token in local cache
-      ALL_TOKENS.add(accessor);
+      //      ALL_TOKENS.add(accessor);
    }
 
    /**
@@ -232,7 +231,7 @@ public class ExoOAuthProviderService implements Startable
       accessor.accessToken = null;
 
       // add to the local cache
-      ALL_TOKENS.add(accessor);
+      tokens.put(accessor.requestToken, accessor);
 
    }
 
@@ -252,13 +251,14 @@ public class ExoOAuthProviderService implements Startable
       String token_data = consumer_key + System.nanoTime();
       String token = DigestUtils.md5Hex(token_data);
       // first remove the accessor from cache
-      ALL_TOKENS.remove(accessor);
+      //      ALL_TOKENS.remove(accessor);
+      tokens.remove(accessor.requestToken);
 
       accessor.requestToken = null;
       accessor.accessToken = token;
 
       // update token in local cache
-      ALL_TOKENS.add(accessor);
+      tokens.put(accessor.accessToken, accessor);
    }
 
    public static void handleException(Exception e, HttpServletRequest request, HttpServletResponse response,

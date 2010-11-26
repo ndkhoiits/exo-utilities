@@ -19,9 +19,13 @@
 
 package net.oauth.example.provider.servlets;
 
+import net.oauth.example.provider.core.ExoOAuthProviderService;
+
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.web.AbstractFilter;
+
 import net.oauth.OAuthAccessor;
 import net.oauth.OAuthMessage;
-import net.oauth.example.provider.core.ExoOAuthProviderService;
 import net.oauth.server.OAuthServlet;
 
 import java.io.IOException;
@@ -39,12 +43,8 @@ import javax.servlet.http.HttpServletResponse;
  * @author <a href="trongtt@gmail.com">Trong Tran</a>
  * @version $Revision$
  */
-public class OAuthConsumerFilter implements Filter
+public class OAuthConsumerFilter extends AbstractFilter
 {
-
-   public void init(FilterConfig filterConfig) throws ServletException
-   {
-   }
 
    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
       ServletException
@@ -52,7 +52,11 @@ public class OAuthConsumerFilter implements Filter
       try
       {
          OAuthMessage requestMessage = OAuthServlet.getMessage((HttpServletRequest)request, null);
-         OAuthAccessor accessor = ExoOAuthProviderService.getAccessor(requestMessage);
+
+         ExoContainer container = getContainer();
+         ExoOAuthProviderService provider = (ExoOAuthProviderService)container.getComponentInstanceOfType(ExoOAuthProviderService.class);
+         OAuthAccessor accessor = provider.getAccessor(requestMessage);
+         
          ExoOAuthProviderService.VALIDATOR.validateMessage(requestMessage, accessor);
          request.setAttribute("OAUTH_USER_ID", accessor.getProperty("user"));
          chain.doFilter(request, response);
@@ -67,7 +71,6 @@ public class OAuthConsumerFilter implements Filter
    public void destroy()
    {
       // TODO Auto-generated method stub
-
+      
    }
-
 }

@@ -50,7 +50,8 @@ public class ExoAccessTokenServlet extends AbstractHttpServlet
       {
          OAuthMessage requestMessage = OAuthServlet.getMessage(req, null);
 
-         OAuthAccessor accessor = ExoOAuthProviderService.getAccessor(requestMessage);
+         ExoOAuthProviderService provider = (ExoOAuthProviderService)container.getComponentInstanceOfType(ExoOAuthProviderService.class);
+         OAuthAccessor accessor = provider.getAccessor(requestMessage);
          ExoOAuthProviderService.VALIDATOR.validateMessage(requestMessage, accessor);
 
          // make sure token is authorized
@@ -60,7 +61,6 @@ public class ExoAccessTokenServlet extends AbstractHttpServlet
             throw problem;
          }
          
-         ExoOAuthProviderService provider = (ExoOAuthProviderService)container.getComponentInstanceOfType(ExoOAuthProviderService.class);
          // generate access token and secret
          provider.generateAccessToken(accessor);
 

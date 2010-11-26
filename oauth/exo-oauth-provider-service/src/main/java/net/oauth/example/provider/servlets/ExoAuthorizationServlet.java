@@ -26,8 +26,6 @@ import net.oauth.example.provider.core.ExoOAuthProviderService;
 import net.oauth.server.OAuthServlet;
 
 import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.web.AbstractHttpServlet;
 import org.exoplatform.services.security.Authenticator;
 import org.exoplatform.services.security.Credential;
@@ -48,45 +46,46 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class ExoAuthorizationServlet extends AbstractHttpServlet
 {
-   @Override
-   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
-   {
-
-      try
-      {
-         
-         ExoContainer pcontainer = PortalContainer.getInstance();
-         
-         OAuthMessage requestMessage = OAuthServlet.getMessage(request, null);
-
-         OAuthAccessor accessor = ExoOAuthProviderService.getAccessor(requestMessage);
-
-         if (Boolean.TRUE.equals(accessor.getProperty("authorized")))
-         {
-            // already authorized send the user back
-            returnToConsumer(request, response, accessor);
-         }
-         else
-         {
-            sendToAuthorizePage(request, response, accessor);
-         }
-
-      }
-      catch (Exception e)
-      {
-         ExoOAuthProviderService.handleException(e, request, response, true);
-      }
-
-   }
+//   @Override
+//   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+//   {
+//
+//      try
+//      {
+//         OAuthMessage requestMessage = OAuthServlet.getMessage(request, null);
+//
+//         ExoOAuthProviderService provider = (ExoOAuthProviderService)container.getComponentInstanceOfType(ExoOAuthProviderService.class);
+//         OAuthAccessor accessor = provider.getAccessor(requestMessage);
+//
+//         if (Boolean.TRUE.equals(accessor.getProperty("authorized")))
+//         {
+//            // already authorized send the user back
+//            returnToConsumer(request, response, accessor);
+//         }
+//         else
+//         {
+//            sendToAuthorizePage(request, response, accessor);
+//         }
+//
+//      }
+//      catch (Exception e)
+//      {
+//         ExoOAuthProviderService.handleException(e, request, response, true);
+//      }
+//
+//   }
 
    @Override
-   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+   protected void onService(ExoContainer container, HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException
    {
 
       try
       {
          OAuthMessage oauthMessage = OAuthServlet.getMessage(request, null);
-         OAuthAccessor accessor = ExoOAuthProviderService.getAccessor(oauthMessage);
+         
+         ExoOAuthProviderService provider = (ExoOAuthProviderService)container.getComponentInstanceOfType(ExoOAuthProviderService.class);
+         OAuthAccessor accessor = provider.getAccessor(oauthMessage);
          // Accessor can has only request token and secret token.
          // If current accessor was marked as authorized in some other way.
          if (Boolean.TRUE.equals(accessor.getProperty("authorized"))) {           
@@ -104,7 +103,6 @@ public class ExoAuthorizationServlet extends AbstractHttpServlet
          }
 
          Identity identity = null;         
-         ExoContainer container = ExoContainerContext.getCurrentContainer(); 
          Authenticator authenticator = (Authenticator) container.getComponentInstanceOfType(Authenticator.class);
          Credential[] credentials = new Credential[] { new UsernameCredential(username),
              new PasswordCredential(password) };
@@ -118,7 +116,6 @@ public class ExoAuthorizationServlet extends AbstractHttpServlet
            return;
          }
          
-         ExoOAuthProviderService provider = (ExoOAuthProviderService)container.getComponentInstanceOfType(ExoOAuthProviderService.class);
          // authentication success, authorize token 
          provider.markAsAuthorized(accessor, identity);
 
