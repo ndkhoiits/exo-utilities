@@ -10,6 +10,7 @@
       <module>exo-oauth-provider</module>
       <module>example-oauth-gadget</module>
       <module>example-rest-service</module>
+      <module>oauth-consumer-management</module>
    </modules>
    <build>
       <plugins>
