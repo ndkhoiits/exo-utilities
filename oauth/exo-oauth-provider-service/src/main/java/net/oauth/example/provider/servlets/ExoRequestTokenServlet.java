@@ -32,7 +32,6 @@ import org.exoplatform.container.web.AbstractHttpServlet;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,20 +42,6 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class ExoRequestTokenServlet extends AbstractHttpServlet
 {
-
-   @Override
-   protected void afterInit(ServletConfig config) throws ServletException
-   {
-      try
-      {
-         ExoOAuthProviderService.loadConsumers(config);
-      }
-      catch (IOException e)
-      {
-         throw new ServletException(e.getMessage());
-      }
-   }
-
    @Override
    protected void onService(ExoContainer container, HttpServletRequest req, HttpServletResponse res)
       throws ServletException, IOException

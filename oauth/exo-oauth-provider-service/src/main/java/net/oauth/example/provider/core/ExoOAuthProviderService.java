@@ -31,6 +31,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.ExoCache;
 import org.exoplatform.services.security.Identity;
+import org.picocontainer.Startable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,7 +43,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,7 +52,7 @@ import javax.servlet.http.HttpServletResponse;
  * @version $Revision$
  */
 
-public class ExoOAuthProviderService
+public class ExoOAuthProviderService implements Startable
 {
    private ExoCache<String, Object> tokens;
    
@@ -70,15 +70,30 @@ public class ExoOAuthProviderService
 
    private static Properties consumerProperties = null;
 
-   public static synchronized void loadConsumers(ServletConfig config) throws IOException
+   public void start()
+   {
+      try
+      {
+         loadConsumers();
+      }
+      catch (IOException e)
+      {
+         e.printStackTrace();
+      }
+   }
+
+   public void stop()
+   {
+   }
+
+   private void loadConsumers() throws IOException
    {
       Properties p = consumerProperties;
       if (p == null)
       {
          p = new Properties();
-         String resourceName =
-            "/" + ExoOAuthProviderService.class.getPackage().getName().replace(".", "/") + "/provider.properties";
-         URL resource = ExoOAuthProviderService.class.getClassLoader().getResource(resourceName);
+         String resourceName = "provider.properties";
+         URL resource = ExoOAuthProviderService.class.getResource(resourceName);
          if (resource == null)
          {
             throw new IOException("resource not found: " + resourceName);
@@ -183,14 +198,14 @@ public class ExoOAuthProviderService
    {
 
       // first remove the accessor from cache
-      tokens.remove(accessor.toString());
+      ALL_TOKENS.remove(accessor);
 
       accessor.setProperty("user", identity.getUserId());
       accessor.setProperty("user_roles", identity.getRoles());
       accessor.setProperty("authorized", Boolean.TRUE);
 
       // update token in local cache
-      tokens.put(accessor.toString(), accessor);
+      ALL_TOKENS.add(accessor);
    }
 
    /**
@@ -217,7 +232,7 @@ public class ExoOAuthProviderService
       accessor.accessToken = null;
 
       // add to the local cache
-      tokens.put(accessor.toString(), accessor);
+      ALL_TOKENS.add(accessor);
 
    }
 
@@ -237,13 +252,13 @@ public class ExoOAuthProviderService
       String token_data = consumer_key + System.nanoTime();
       String token = DigestUtils.md5Hex(token_data);
       // first remove the accessor from cache
-      tokens.remove(accessor.toString());
+      ALL_TOKENS.remove(accessor);
 
       accessor.requestToken = null;
       accessor.accessToken = token;
 
       // update token in local cache
-      tokens.put(accessor.toString(), accessor);
+      ALL_TOKENS.add(accessor);
    }
 
    public static void handleException(Exception e, HttpServletRequest request, HttpServletResponse response,
