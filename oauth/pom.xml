@@ -7,10 +7,10 @@
    <version>1.0</version>
    <name>OAuth::Examples::Parent POM</name>
    <modules>
-      <module>exo-oauth-provider</module>
+      <module>exo-oauth-provider-service</module>
+      <module>exo-oauth-provider-webapp</module>
       <module>example-oauth-gadget</module>
       <module>example-rest-service</module>
-      <module>oauth-consumer-management</module>
    </modules>
    <build>
       <plugins>
