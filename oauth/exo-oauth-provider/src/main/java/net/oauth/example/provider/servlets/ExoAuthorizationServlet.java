@@ -103,7 +103,7 @@ public class ExoAuthorizationServlet extends AbstractHttpServlet
            sendToAuthorizePage(request, response, accessor);
            return;
          }
-         
+
          Identity identity = null;         
          ExoContainer container = ExoContainerContext.getCurrentContainer(); 
          Authenticator authenticator = (Authenticator) container.getComponentInstanceOfType(Authenticator.class);
