@@ -9,6 +9,6 @@
    <packaging>war</packaging>
    <name>OAuth::Examples::Provider webapp</name>
    <build>
-      <finalName>exo-oauth-provider-webapp</finalName>
+      <finalName>exo-oauth-provider</finalName>
    </build>
 </project>
