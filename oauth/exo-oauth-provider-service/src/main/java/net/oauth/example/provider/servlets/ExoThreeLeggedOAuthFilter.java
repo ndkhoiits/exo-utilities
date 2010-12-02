@@ -43,7 +43,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author <a href="trongtt@gmail.com">Trong Tran</a>
  * @version $Revision$
  */
-public class OAuthConsumerFilter extends AbstractFilter
+public class ExoThreeLeggedOAuthFilter extends AbstractFilter
 {
 
    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,

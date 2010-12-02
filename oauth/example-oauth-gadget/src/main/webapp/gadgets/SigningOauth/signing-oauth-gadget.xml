@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="Signing OAuth Gadget" scrolling="true">
+    <Require feature="locked-domain"/>
+  </ModulePrefs>
+  <Content type="html">
+  <![CDATA[
+
+  <style>
+  #main {
+    margin: 0px;
+    padding: 0px;
+    font-size: small;
+  }
+  </style>
+
+  <div id="main" style="display: block">
+  </div>
+
+  <script type="text/javascript">
+    // Process returned JSON feed to display data.
+    function showResults(result) {
+      var titleElement = document.createElement('div');
+      var nameNode = document.createTextNode(result);
+      titleElement.appendChild(nameNode);
+      document.getElementById("main").appendChild(titleElement);
+    }
+
+    function fetchData() {
+      var params = {};
+      url = "http://localhost:8080/exo-oauth-provider/rest/SocialRest/infos";
+      params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.TEXT;
+      params[gadgets.io.RequestParameters.AUTHORIZATION] = gadgets.io.AuthorizationType.SIGNED;
+      params[gadgets.io.RequestParameters.OAUTH_SERVICE_NAME] = "myKey";
+      params[gadgets.io.RequestParameters.METHOD] = gadgets.io.MethodType.GET;
+
+      gadgets.io.makeRequest(url, function (response) {
+        if (response.data) {
+            showResults(response.data);
+        } else {
+            // The response.oauthError and response.oauthErrorText values may help debug
+            // problems with your gadget.
+            var main = document.getElementById('main');
+            var err = document.createTextNode('OAuth error: ' +
+              response.oauthError + ': ' + response.oauthErrorText);
+            main.appendChild(err);
+        }
+      }, params);
+    }
+    // Call fetchData() when gadget loads.
+    gadgets.util.registerOnLoadHandler(fetchData);
+  </script>
+  ]]>
+  </Content>
+</Module>

@@ -28,5 +28,9 @@
   <component>
     <type>net.oauth.example.provider.core.ExoOAuthProviderService</type>
   </component>
+  
+  <component>
+    <type>net.oauth.example.provider.core.ExoTwoLeggedOAuthProviderService</type>
+  </component>
 
 </configuration>

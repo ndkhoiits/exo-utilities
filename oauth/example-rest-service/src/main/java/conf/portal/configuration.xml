@@ -28,5 +28,9 @@
   <component>
     <type>trongtt.examples.SimpleRest</type>
   </component>
+  
+  <component>
+    <type>trongtt.examples.SocialRest</type>
+  </component>
 
 </configuration>

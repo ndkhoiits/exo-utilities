@@ -56,11 +56,6 @@ public class ExoOAuthProviderService implements Startable
 {
    private ExoCache<String, OAuthAccessor> tokens;
 
-   public ExoOAuthProviderService(CacheService cService)
-   {
-      tokens = cService.getCacheInstance(ExoOAuthProviderService.class.getSimpleName());
-   }
-
    public static final OAuthValidator VALIDATOR = new SimpleOAuthValidator();
 
    private static final Map<String, OAuthConsumer> ALL_CONSUMERS = Collections
@@ -69,6 +64,12 @@ public class ExoOAuthProviderService implements Startable
    private static final Collection<OAuthAccessor> ALL_TOKENS = new HashSet<OAuthAccessor>();
 
    private static Properties consumerProperties = null;
+   
+   public ExoOAuthProviderService(){};
+   public ExoOAuthProviderService(CacheService cService)
+   {
+      tokens = cService.getCacheInstance(ExoOAuthProviderService.class.getSimpleName());
+   }
 
    public void start()
    {
