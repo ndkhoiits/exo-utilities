@@ -30,11 +30,15 @@
    </filter-mapping>
    <filter-mapping>
       <filter-name>ExoTwoLeggedOAuthFilter</filter-name>
-      <url-pattern>/rest/calculator/*</url-pattern>
+      <url-pattern>/rest/SocialRest/*</url-pattern>
    </filter-mapping>
    <filter-mapping>
       <filter-name>ExoThreeLeggedOAuthFilter</filter-name>
       <url-pattern>/rest/SimpleRest/*</url-pattern>
+   </filter-mapping>
+   <filter-mapping>
+      <filter-name>ExoThreeLeggedOAuthFilter</filter-name>
+      <url-pattern>/echo</url-pattern>
    </filter-mapping>
    <filter-mapping>
       <filter-name>RestEncodingFilter</filter-name>

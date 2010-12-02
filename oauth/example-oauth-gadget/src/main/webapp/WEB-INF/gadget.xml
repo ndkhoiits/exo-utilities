@@ -29,7 +29,7 @@
       <path>/gadgets/SimpleOauth/oauth-gadget.xml</path>
    </gadget>
 
-   <gadget name="TwoLeggedOauth">
+   <gadget name="SigningOauth">
       <path>/gadgets/SigningOauth/signing-oauth-gadget.xml</path>
    </gadget>
 </gadgets>
