@@ -9,6 +9,8 @@
    <modules>
       <module>exo-oauth-provider-service</module>
       <module>exo-oauth-provider-webapp</module>
+      <module>exo-oauth-consumer-service</module>
+      <module>example-oauth-consumer</module>
       <module>example-oauth-gadget</module>
       <module>example-rest-service</module>
    </modules>
