@@ -23,6 +23,7 @@ import net.oauth.OAuth;
 import net.oauth.OAuthAccessor;
 import net.oauth.OAuthConsumer;
 import net.oauth.OAuthMessage;
+import net.oauth.OAuthValidator;
 import net.oauth.example.provider.core.ExoOAuthProviderService;
 import net.oauth.server.OAuthServlet;
 
@@ -48,23 +49,25 @@ public class ExoRequestTokenServlet extends AbstractHttpServlet
    {
       try
       {
+         ExoOAuthProviderService provider =
+            (ExoOAuthProviderService)container.getComponentInstanceOfType(ExoOAuthProviderService.class);
          OAuthMessage requestMessage = OAuthServlet.getMessage(req, null);
 
-         OAuthConsumer consumer = ExoOAuthProviderService.getConsumer(requestMessage);
+         OAuthConsumer consumer = provider.getConsumer(requestMessage);
 
          OAuthAccessor accessor = new OAuthAccessor(consumer);
-         ExoOAuthProviderService.VALIDATOR.validateMessage(requestMessage, accessor);
+
+         OAuthValidator validator = (OAuthValidator)container.getComponentInstanceOfType(OAuthValidator.class);
+         validator.validateMessage(requestMessage, accessor);
+
+         // Support the 'Variable Accessor Secret' extension
+         // described in http://oauth.pbwiki.com/AccessorSecret
+         String secret = requestMessage.getParameter("oauth_accessor_secret");
+         if (secret != null)
          {
-            // Support the 'Variable Accessor Secret' extension
-            // described in http://oauth.pbwiki.com/AccessorSecret
-            String secret = requestMessage.getParameter("oauth_accessor_secret");
-            if (secret != null)
-            {
-               accessor.setProperty(OAuthConsumer.ACCESSOR_SECRET, secret);
-            }
+            accessor.setProperty(OAuthConsumer.ACCESSOR_SECRET, secret);
          }
-         
-         ExoOAuthProviderService provider = (ExoOAuthProviderService)container.getComponentInstanceOfType(ExoOAuthProviderService.class);
+
          // generate request_token and secret
          provider.generateRequestToken(accessor);
 

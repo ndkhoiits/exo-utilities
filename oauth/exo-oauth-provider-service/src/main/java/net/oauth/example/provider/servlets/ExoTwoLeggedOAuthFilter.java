@@ -16,6 +16,17 @@
  */
 package net.oauth.example.provider.servlets;
 
+import net.oauth.OAuth;
+import net.oauth.OAuthAccessor;
+import net.oauth.OAuthMessage;
+import net.oauth.OAuthValidator;
+import net.oauth.example.provider.core.ExoOAuthProviderService;
+import net.oauth.example.provider.core.ExoTwoLeggedOAuthProviderService;
+import net.oauth.server.OAuthServlet;
+
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.web.AbstractFilter;
+
 import java.io.IOException;
 
 import javax.servlet.FilterChain;
@@ -25,16 +36,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.oauth.OAuth;
-import net.oauth.OAuthAccessor;
-import net.oauth.OAuthMessage;
-import net.oauth.example.provider.core.ExoOAuthProviderService;
-import net.oauth.example.provider.core.ExoTwoLeggedOAuthProviderService;
-import net.oauth.server.OAuthServlet;
-
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.web.AbstractFilter;
-
 /**
  * Created by The eXo Platform SAS
  * Author : Nguyen Anh Kien
@@ -43,21 +44,9 @@ import org.exoplatform.container.web.AbstractFilter;
  */
 public class ExoTwoLeggedOAuthFilter extends AbstractFilter
 {
-
-   /* (non-Javadoc)
-    * @see javax.servlet.Filter#destroy()
-    */
-   @Override
-   public void destroy()
-   {
-      // TODO Auto-generated method stub
-
-   }
-
    /* (non-Javadoc)
     * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain)
     */
-   @Override
    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
          ServletException
    {
@@ -70,7 +59,8 @@ public class ExoTwoLeggedOAuthFilter extends AbstractFilter
          ExoContainer container = getContainer();
          ExoTwoLeggedOAuthProviderService provider = (ExoTwoLeggedOAuthProviderService)container.getComponentInstanceOfType(ExoTwoLeggedOAuthProviderService.class);
          OAuthAccessor accessor = provider.getAccessor(requestMessage);
-         ExoOAuthProviderService.VALIDATOR.validateMessage(requestMessage, accessor);
+         OAuthValidator validator = (OAuthValidator)container.getComponentInstanceOfType(OAuthValidator.class);
+         validator.validateMessage(requestMessage, accessor);
          
          chain.doFilter(request, response);
       }
@@ -78,6 +68,15 @@ public class ExoTwoLeggedOAuthFilter extends AbstractFilter
       {
          ExoOAuthProviderService.handleException(e, (HttpServletRequest)request, (HttpServletResponse)response, false);
       }
+
+   }
+
+   /* (non-Javadoc)
+    * @see javax.servlet.Filter#destroy()
+    */
+   public void destroy()
+   {
+      // TODO Auto-generated method stub
 
    }
 }

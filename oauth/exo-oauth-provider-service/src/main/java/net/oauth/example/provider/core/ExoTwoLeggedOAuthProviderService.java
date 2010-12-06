@@ -16,12 +16,15 @@
  */
 package net.oauth.example.provider.core;
 
-import java.io.IOException;
-
 import net.oauth.OAuthAccessor;
 import net.oauth.OAuthConsumer;
 import net.oauth.OAuthMessage;
 import net.oauth.OAuthProblemException;
+import net.oauth.OAuthValidator;
+
+import org.exoplatform.services.cache.CacheService;
+
+import java.io.IOException;
 
 /**
  * Created by The eXo Platform SAS
@@ -31,6 +34,11 @@ import net.oauth.OAuthProblemException;
  */
 public class ExoTwoLeggedOAuthProviderService extends ExoOAuthProviderService
 {    
+   public ExoTwoLeggedOAuthProviderService(OAuthValidator validator, CacheService cService)
+   {
+      super(validator, cService);
+   }
+
    public OAuthAccessor getAccessor(OAuthMessage requestMessage) throws IOException, OAuthProblemException
    {
       OAuthConsumer authConsumer = getConsumer(requestMessage);

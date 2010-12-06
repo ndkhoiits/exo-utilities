@@ -33,4 +33,9 @@
     <type>net.oauth.example.provider.core.ExoTwoLeggedOAuthProviderService</type>
   </component>
 
+  <component>
+    <key>net.oauth.OAuthValidator</key>
+    <type>net.oauth.SimpleOAuthValidator</type>
+  </component>
+  
 </configuration>

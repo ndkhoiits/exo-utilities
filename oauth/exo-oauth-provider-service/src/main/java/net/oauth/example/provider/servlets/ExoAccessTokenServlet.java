@@ -19,6 +19,8 @@
 
 package net.oauth.example.provider.servlets;
 
+import net.oauth.OAuthValidator;
+
 import net.oauth.OAuth;
 import net.oauth.OAuthAccessor;
 import net.oauth.OAuthMessage;
@@ -52,13 +54,15 @@ public class ExoAccessTokenServlet extends AbstractHttpServlet
 
          ExoOAuthProviderService provider = (ExoOAuthProviderService)container.getComponentInstanceOfType(ExoOAuthProviderService.class);
          OAuthAccessor accessor = provider.getAccessor(requestMessage);
-         ExoOAuthProviderService.VALIDATOR.validateMessage(requestMessage, accessor);
+         
+         OAuthValidator validator = (OAuthValidator)container.getComponentInstanceOfType(OAuthValidator.class);
+         validator.validateMessage(requestMessage, accessor);
 
          // make sure token is authorized
          if (!Boolean.TRUE.equals(accessor.getProperty("authorized")))
          {
-            OAuthProblemException problem = new OAuthProblemException("permission_denied");
-            throw problem;
+            throw new OAuthProblemException("permission_denied");
+//            throw problem;
          }
          
          // generate access token and secret

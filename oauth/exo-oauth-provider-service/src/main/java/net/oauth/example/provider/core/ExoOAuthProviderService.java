@@ -24,7 +24,6 @@ import net.oauth.OAuthException;
 import net.oauth.OAuthMessage;
 import net.oauth.OAuthProblemException;
 import net.oauth.OAuthValidator;
-import net.oauth.SimpleOAuthValidator;
 import net.oauth.server.OAuthServlet;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -36,10 +35,8 @@ import org.picocontainer.Startable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
 
@@ -55,22 +52,15 @@ import javax.servlet.http.HttpServletResponse;
 public class ExoOAuthProviderService implements Startable
 {
    private ExoCache<String, OAuthAccessor> tokens;
-
-   public static final OAuthValidator VALIDATOR = new SimpleOAuthValidator();
-
-   private static final Map<String, OAuthConsumer> ALL_CONSUMERS = Collections
-      .synchronizedMap(new HashMap<String, OAuthConsumer>(10));
-
-   private static final Collection<OAuthAccessor> ALL_TOKENS = new HashSet<OAuthAccessor>();
-
-   private static Properties consumerProperties = null;
    
-   public ExoOAuthProviderService(){};
-   public ExoOAuthProviderService(CacheService cService)
+   public ExoOAuthProviderService(OAuthValidator validator, CacheService cService)
    {
       tokens = cService.getCacheInstance(ExoOAuthProviderService.class.getSimpleName());
    }
 
+   private static final Map<String, OAuthConsumer> ALL_CONSUMERS = Collections
+      .synchronizedMap(new HashMap<String, OAuthConsumer>(10));
+   
    public void start()
    {
       try
@@ -89,27 +79,22 @@ public class ExoOAuthProviderService implements Startable
 
    private void loadConsumers() throws IOException
    {
-      Properties p = consumerProperties;
-      if (p == null)
+      Properties p = new Properties();
+      String resourceName = "provider.properties";
+      URL resource = ExoOAuthProviderService.class.getResource(resourceName);
+      if (resource == null)
       {
-         p = new Properties();
-         String resourceName = "provider.properties";
-         URL resource = ExoOAuthProviderService.class.getResource(resourceName);
-         if (resource == null)
-         {
-            throw new IOException("resource not found: " + resourceName);
-         }
-         InputStream stream = resource.openStream();
-         try
-         {
-            p.load(stream);
-         }
-         finally
-         {
-            stream.close();
-         }
+         throw new IOException("resource not found: " + resourceName);
       }
-      consumerProperties = p;
+      InputStream stream = resource.openStream();
+      try
+      {
+         p.load(stream);
+      }
+      finally
+      {
+         stream.close();
+      }
 
       // for each entry in the properties file create a OAuthConsumer
       for (Map.Entry<Object, Object> prop : p.entrySet())
@@ -134,8 +119,7 @@ public class ExoOAuthProviderService implements Startable
 
    }
 
-   public static synchronized OAuthConsumer getConsumer(OAuthMessage requestMessage) throws IOException,
-      OAuthProblemException
+   public synchronized OAuthConsumer getConsumer(OAuthMessage requestMessage) throws IOException, OAuthProblemException
    {
 
       OAuthConsumer consumer = null;
@@ -181,11 +165,10 @@ public class ExoOAuthProviderService implements Startable
             }
          }
       }
-      
+
       if (accessor == null)
       {
-         OAuthProblemException problem = new OAuthProblemException("token_expired");
-         throw problem;
+         throw new OAuthProblemException("token_expired");
       }
 
       return accessor;
@@ -233,7 +216,7 @@ public class ExoOAuthProviderService implements Startable
 
       // add to the local cache
       tokens.put(accessor.requestToken, accessor);
-
+      System.out.println(tokens.getCacheSize());
    }
 
    /**

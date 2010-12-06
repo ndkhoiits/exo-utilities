@@ -19,20 +19,18 @@
 
 package net.oauth.example.provider.servlets;
 
+import net.oauth.OAuthAccessor;
+import net.oauth.OAuthMessage;
+import net.oauth.OAuthValidator;
 import net.oauth.example.provider.core.ExoOAuthProviderService;
+import net.oauth.server.OAuthServlet;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.web.AbstractFilter;
 
-import net.oauth.OAuthAccessor;
-import net.oauth.OAuthMessage;
-import net.oauth.server.OAuthServlet;
-
 import java.io.IOException;
 
-import javax.servlet.Filter;
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -57,7 +55,8 @@ public class ExoThreeLeggedOAuthFilter extends AbstractFilter
          ExoOAuthProviderService provider = (ExoOAuthProviderService)container.getComponentInstanceOfType(ExoOAuthProviderService.class);
          OAuthAccessor accessor = provider.getAccessor(requestMessage);
          
-         ExoOAuthProviderService.VALIDATOR.validateMessage(requestMessage, accessor);
+         OAuthValidator validator = (OAuthValidator)container.getComponentInstanceOfType(OAuthValidator.class);
+         validator.validateMessage(requestMessage, accessor);
          request.setAttribute("OAUTH_USER_ID", accessor.getProperty("user"));
          chain.doFilter(request, response);
       }
