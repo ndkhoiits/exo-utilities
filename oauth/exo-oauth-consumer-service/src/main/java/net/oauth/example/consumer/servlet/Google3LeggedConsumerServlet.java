@@ -39,7 +39,7 @@ public class Google3LeggedConsumerServlet extends HttpServlet
    @Override
    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
     String consumer = "googleContacts";
-    String restEndpointUrl = "http://www-opensocial.googleusercontent.com/api/";     
+    String restEndpointUrl = "http://www.google.com/m8/feeds/contacts/default/base";     
     
     try {
       OAuth3LeggedConsumerService oauthService = new OAuth3LeggedConsumerService();

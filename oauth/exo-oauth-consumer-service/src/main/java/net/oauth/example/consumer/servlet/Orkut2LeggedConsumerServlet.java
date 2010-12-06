@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.oauth.example.consumer.ExoOAuthMessage;
-import net.oauth.example.consumer.service.OAuth3LeggedConsumerService;
+import net.oauth.example.consumer.service.OAuth2LeggedConsumerService;
 
 /**
  * Created by The eXo Platform SAS
@@ -39,14 +39,14 @@ public class Orkut2LeggedConsumerServlet extends HttpServlet
    @Override
    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
     String consumer = "orkut";
-    String restEndpointUrl = "http://sandbox.orkut.com/social/rest/";     
+    String restEndpointUrl = "http://sandbox.orkut.com/social/rest/appdata/@me/@self/@app?xoauth_requestor_id=03067092798963641994";     
     
     try {
-      OAuth3LeggedConsumerService oauthService = new OAuth3LeggedConsumerService();
+      OAuth2LeggedConsumerService oauthService = new OAuth2LeggedConsumerService();
       ExoOAuthMessage result = oauthService.send(consumer, restEndpointUrl, request, response);
-      OAuth3LeggedConsumerService.copyResponse(result, response);
+      OAuth2LeggedConsumerService.copyResponse(result, response);
     } catch (Exception e) {
-       OAuth3LeggedConsumerService.handleException(e, request, response, consumer);
+       OAuth2LeggedConsumerService.handleException(e, request, response, consumer);
     }
    }
 }

@@ -22,6 +22,9 @@ import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -34,7 +37,9 @@ import net.oauth.OAuthConsumer;
 import net.oauth.OAuthException;
 import net.oauth.OAuthMessage;
 import net.oauth.OAuthProblemException;
+import net.oauth.ParameterStyle;
 import net.oauth.example.consumer.CookieMap;
+import net.oauth.example.consumer.ExoOAuthMessage;
 import net.oauth.example.consumer.OAuth3LeggedCallback;
 import net.oauth.example.consumer.OAuthConsumerStorage;
 import net.oauth.example.consumer.RedirectException;
@@ -47,8 +52,32 @@ import net.oauth.server.OAuthServlet;
  * Dec 3, 2010  
  */
 public class OAuth3LeggedConsumerService extends OAuth2LeggedConsumerService
-{
+{   
    public OAuth3LeggedConsumerService(){}
+   
+   public ExoOAuthMessage send(String consumerName, String restEndpointUrl, HttpServletRequest request, HttpServletResponse response) 
+   throws OAuthException, IOException, URISyntaxException{      
+      OAuthConsumer consumer = OAuthConsumerStorage.getConsumer(consumerName);
+      OAuthAccessor accessor = getAccessor(request, response, consumer);
+      OAuthMessage message = accessor.newRequestMessage(OAuthMessage.GET, restEndpointUrl, null);
+
+      OAuthMessage responseMessage = OAuth2LeggedConsumerService.CLIENT.invoke(message, ParameterStyle.AUTHORIZATION_HEADER);
+      return (new ExoOAuthMessage(consumerName, responseMessage));
+   }  
+   
+   /**
+    * Construct an accessor from cookies. The resulting accessor won't
+    * necessarily have any tokens.
+    */
+   public static OAuthAccessor newAccessor(OAuthConsumer consumer, CookieMap cookies)
+           throws OAuthException {
+       OAuthAccessor accessor = new OAuthAccessor(consumer);
+       String consumerName = (String) consumer.getProperty("name");
+       accessor.requestToken = cookies.get(consumerName + ".requestToken");
+       accessor.accessToken = cookies.get(consumerName + ".accessToken");
+       accessor.tokenSecret = cookies.get(consumerName + ".tokenSecret");
+       return accessor;
+   }
    
    /**
     * Get the access token and token secret for the given consumer. Get them
@@ -66,6 +95,17 @@ public class OAuth3LeggedConsumerService extends OAuth2LeggedConsumerService
            getAccessToken(request, cookies, accessor);
        }
        return accessor;
+   }
+   
+   /** Remove all the cookies that contain accessors' data. */
+   public static void removeAccessors(CookieMap cookies) {
+       List<String> names = new ArrayList<String>(cookies.keySet());
+       for (String name : names) {
+           if (name.endsWith(".requestToken") || name.endsWith(".accessToken")
+                   || name.endsWith(".tokenSecret")) {
+               cookies.remove(name);
+           }
+       }
    }
    
    /**
@@ -128,6 +168,19 @@ public class OAuth3LeggedConsumerService extends OAuth2LeggedConsumerService
            path.append("?").append(queryString);
        }
        return path.toString();
+   }
+   
+   /**
+    * The names of problems from which a consumer can recover by getting a
+    * fresh token.
+    */
+   protected static final Collection<String> RECOVERABLE_PROBLEMS = new HashSet<String>();
+   static {
+       RECOVERABLE_PROBLEMS.add("token_revoked");
+       RECOVERABLE_PROBLEMS.add("token_expired");
+       RECOVERABLE_PROBLEMS.add("permission_unknown");
+       // In the case of permission_unknown, getting a fresh token
+       // will cause the Service Provider to ask the User to decide.
    }
    
    /**

@@ -20,10 +20,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +32,6 @@ import net.oauth.OAuthMessage;
 import net.oauth.ParameterStyle;
 import net.oauth.client.OAuthClient;
 import net.oauth.client.httpclient3.HttpClient3;
-import net.oauth.example.consumer.CookieMap;
 import net.oauth.example.consumer.ExoOAuthMessage;
 import net.oauth.example.consumer.OAuthConsumerStorage;
 import net.oauth.example.consumer.RedirectException;
@@ -73,34 +68,8 @@ public class OAuth2LeggedConsumerService
    public static OAuthAccessor getAccessor(HttpServletRequest request,
            HttpServletResponse response, OAuthConsumer consumer)
            throws OAuthException, IOException, URISyntaxException {
-       CookieMap cookies = new CookieMap(request, response);
-       OAuthAccessor accessor = newAccessor(consumer, cookies);
-       return accessor;
-   }
-
-   /**
-    * Construct an accessor from cookies. The resulting accessor won't
-    * necessarily have any tokens.
-    */
-   public static OAuthAccessor newAccessor(OAuthConsumer consumer, CookieMap cookies)
-           throws OAuthException {
        OAuthAccessor accessor = new OAuthAccessor(consumer);
-       String consumerName = (String) consumer.getProperty("name");
-       accessor.requestToken = cookies.get(consumerName + ".requestToken");
-       accessor.accessToken = cookies.get(consumerName + ".accessToken");
-       accessor.tokenSecret = cookies.get(consumerName + ".tokenSecret");
        return accessor;
-   }
-
-   /** Remove all the cookies that contain accessors' data. */
-   public static void removeAccessors(CookieMap cookies) {
-       List<String> names = new ArrayList<String>(cookies.keySet());
-       for (String name : names) {
-           if (name.endsWith(".requestToken") || name.endsWith(".accessToken")
-                   || name.endsWith(".tokenSecret")) {
-               cookies.remove(name);
-           }
-       }
    }
    
    public static void copyResponse(ExoOAuthMessage from, HttpServletResponse into) throws IOException {
@@ -119,19 +88,6 @@ public class OAuth2LeggedConsumerService
        for (int len; 0 < (len = from.read(buffer, 0, buffer.length));) {
            into.write(buffer, 0, len);
        }
-   }
-
-   /**
-    * The names of problems from which a consumer can recover by getting a
-    * fresh token.
-    */
-   protected static final Collection<String> RECOVERABLE_PROBLEMS = new HashSet<String>();
-   static {
-       RECOVERABLE_PROBLEMS.add("token_revoked");
-       RECOVERABLE_PROBLEMS.add("token_expired");
-       RECOVERABLE_PROBLEMS.add("permission_unknown");
-       // In the case of permission_unknown, getting a fresh token
-       // will cause the Service Provider to ask the User to decide.
    }
    
    /**
