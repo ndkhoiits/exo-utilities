@@ -22,7 +22,7 @@ package net.oauth.example.provider.servlets;
 import net.oauth.OAuth;
 import net.oauth.OAuthAccessor;
 import net.oauth.OAuthMessage;
-import net.oauth.example.provider.core.ExoOAuthProviderService;
+import net.oauth.example.provider.core.ExoOAuth3LeggedProviderService;
 import net.oauth.server.OAuthServlet;
 
 import org.exoplatform.container.ExoContainer;
@@ -84,7 +84,7 @@ public class ExoAuthorizationServlet extends AbstractHttpServlet
       {
          OAuthMessage oauthMessage = OAuthServlet.getMessage(request, null);
          
-         ExoOAuthProviderService provider = (ExoOAuthProviderService)container.getComponentInstanceOfType(ExoOAuthProviderService.class);
+         ExoOAuth3LeggedProviderService provider = (ExoOAuth3LeggedProviderService)container.getComponentInstanceOfType(ExoOAuth3LeggedProviderService.class);
          OAuthAccessor accessor = provider.getAccessor(oauthMessage);
          // Accessor can has only request token and secret token.
          // If current accessor was marked as authorized in some other way.
@@ -123,7 +123,7 @@ public class ExoAuthorizationServlet extends AbstractHttpServlet
       }
       catch (Exception e)
       {
-         ExoOAuthProviderService.handleException(e, request, response, true);
+         ExoOAuth3LeggedProviderService.handleException(e, request, response, true);
       }
    }
 

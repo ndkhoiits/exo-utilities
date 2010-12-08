@@ -19,7 +19,7 @@
 
 package net.oauth.example.provider.servlets;
 
-import net.oauth.example.provider.core.ExoOAuthProviderService;
+import net.oauth.example.provider.core.ExoOAuth3LeggedProviderService;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -60,7 +60,7 @@ public class OAuthProtectedServlet extends HttpServlet
       }
       catch (Exception e)
       {
-         ExoOAuthProviderService.handleException(e, req, resp, false);
+         ExoOAuth3LeggedProviderService.handleException(e, req, resp, false);
       }
    }
 }

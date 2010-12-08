@@ -20,8 +20,8 @@ import net.oauth.OAuth;
 import net.oauth.OAuthAccessor;
 import net.oauth.OAuthMessage;
 import net.oauth.OAuthValidator;
-import net.oauth.example.provider.core.ExoOAuthProviderService;
-import net.oauth.example.provider.core.ExoTwoLeggedOAuthProviderService;
+import net.oauth.example.provider.core.ExoOAuth3LeggedProviderService;
+import net.oauth.example.provider.core.ExoOAuth2LeggedProviderService;
 import net.oauth.server.OAuthServlet;
 
 import org.exoplatform.container.ExoContainer;
@@ -42,7 +42,7 @@ import javax.servlet.http.HttpServletResponse;
  *          nguyenanhkien2a@gmail.com
  * Dec 2, 2010  
  */
-public class ExoTwoLeggedOAuthFilter extends AbstractFilter
+public class ExoOAuth2LeggedFilter extends AbstractFilter
 {
    /* (non-Javadoc)
     * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain)
@@ -57,7 +57,7 @@ public class ExoTwoLeggedOAuthFilter extends AbstractFilter
          requestMessage.requireParameters(OAuth.OAUTH_CONSUMER_KEY, OAuth.OAUTH_SIGNATURE, OAuth.OAUTH_SIGNATURE_METHOD);
          
          ExoContainer container = getContainer();
-         ExoTwoLeggedOAuthProviderService provider = (ExoTwoLeggedOAuthProviderService)container.getComponentInstanceOfType(ExoTwoLeggedOAuthProviderService.class);
+         ExoOAuth2LeggedProviderService provider = (ExoOAuth2LeggedProviderService)container.getComponentInstanceOfType(ExoOAuth2LeggedProviderService.class);
          OAuthAccessor accessor = provider.getAccessor(requestMessage);
          OAuthValidator validator = (OAuthValidator)container.getComponentInstanceOfType(OAuthValidator.class);
          validator.validateMessage(requestMessage, accessor);
@@ -66,7 +66,7 @@ public class ExoTwoLeggedOAuthFilter extends AbstractFilter
       }
       catch (Exception e)
       {
-         ExoOAuthProviderService.handleException(e, (HttpServletRequest)request, (HttpServletResponse)response, false);
+         ExoOAuth3LeggedProviderService.handleException(e, (HttpServletRequest)request, (HttpServletResponse)response, false);
       }
 
    }

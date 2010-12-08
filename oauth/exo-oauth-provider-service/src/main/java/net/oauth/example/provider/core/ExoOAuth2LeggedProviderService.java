@@ -32,9 +32,9 @@ import java.io.IOException;
  *          nguyenanhkien2a@gmail.com
  * Dec 1, 2010  
  */
-public class ExoTwoLeggedOAuthProviderService extends ExoOAuthProviderService
+public class ExoOAuth2LeggedProviderService extends ExoOAuth3LeggedProviderService
 {    
-   public ExoTwoLeggedOAuthProviderService(OAuthValidator validator, CacheService cService)
+   public ExoOAuth2LeggedProviderService(OAuthValidator validator, CacheService cService)
    {
       super(validator, cService);
    }

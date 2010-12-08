@@ -49,13 +49,13 @@ import javax.servlet.http.HttpServletResponse;
  * @version $Revision$
  */
 
-public class ExoOAuthProviderService implements Startable
+public class ExoOAuth3LeggedProviderService implements Startable
 {
    private ExoCache<String, OAuthAccessor> tokens;
    
-   public ExoOAuthProviderService(OAuthValidator validator, CacheService cService)
+   public ExoOAuth3LeggedProviderService(OAuthValidator validator, CacheService cService)
    {
-      tokens = cService.getCacheInstance(ExoOAuthProviderService.class.getSimpleName());
+      tokens = cService.getCacheInstance(ExoOAuth3LeggedProviderService.class.getSimpleName());
    }
 
    private static final Map<String, OAuthConsumer> ALL_CONSUMERS = Collections
@@ -81,7 +81,7 @@ public class ExoOAuthProviderService implements Startable
    {
       Properties p = new Properties();
       String resourceName = "provider.properties";
-      URL resource = ExoOAuthProviderService.class.getResource(resourceName);
+      URL resource = ExoOAuth3LeggedProviderService.class.getResource(resourceName);
       if (resource == null)
       {
          throw new IOException("resource not found: " + resourceName);
@@ -126,7 +126,7 @@ public class ExoOAuthProviderService implements Startable
       // try to load from local cache if not throw exception
       String consumer_key = requestMessage.getConsumerKey();
 
-      consumer = ExoOAuthProviderService.ALL_CONSUMERS.get(consumer_key);
+      consumer = ExoOAuth3LeggedProviderService.ALL_CONSUMERS.get(consumer_key);
 
       if (consumer == null)
       {

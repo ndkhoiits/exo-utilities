@@ -24,7 +24,7 @@ import net.oauth.OAuthAccessor;
 import net.oauth.OAuthConsumer;
 import net.oauth.OAuthMessage;
 import net.oauth.OAuthValidator;
-import net.oauth.example.provider.core.ExoOAuthProviderService;
+import net.oauth.example.provider.core.ExoOAuth3LeggedProviderService;
 import net.oauth.server.OAuthServlet;
 
 import org.exoplatform.container.ExoContainer;
@@ -49,8 +49,8 @@ public class ExoRequestTokenServlet extends AbstractHttpServlet
    {
       try
       {
-         ExoOAuthProviderService provider =
-            (ExoOAuthProviderService)container.getComponentInstanceOfType(ExoOAuthProviderService.class);
+         ExoOAuth3LeggedProviderService provider =
+            (ExoOAuth3LeggedProviderService)container.getComponentInstanceOfType(ExoOAuth3LeggedProviderService.class);
          OAuthMessage requestMessage = OAuthServlet.getMessage(req, null);
 
          OAuthConsumer consumer = provider.getConsumer(requestMessage);
@@ -80,7 +80,7 @@ public class ExoRequestTokenServlet extends AbstractHttpServlet
       }
       catch (Exception e)
       {
-         ExoOAuthProviderService.handleException(e, req, res, true);
+         ExoOAuth3LeggedProviderService.handleException(e, req, res, true);
       }
 
    }

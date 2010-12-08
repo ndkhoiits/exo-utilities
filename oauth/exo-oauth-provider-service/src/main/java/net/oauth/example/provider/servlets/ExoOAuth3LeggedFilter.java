@@ -22,7 +22,7 @@ package net.oauth.example.provider.servlets;
 import net.oauth.OAuthAccessor;
 import net.oauth.OAuthMessage;
 import net.oauth.OAuthValidator;
-import net.oauth.example.provider.core.ExoOAuthProviderService;
+import net.oauth.example.provider.core.ExoOAuth3LeggedProviderService;
 import net.oauth.server.OAuthServlet;
 
 import org.exoplatform.container.ExoContainer;
@@ -41,7 +41,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author <a href="trongtt@gmail.com">Trong Tran</a>
  * @version $Revision$
  */
-public class ExoThreeLeggedOAuthFilter extends AbstractFilter
+public class ExoOAuth3LeggedFilter extends AbstractFilter
 {
 
    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
@@ -52,7 +52,7 @@ public class ExoThreeLeggedOAuthFilter extends AbstractFilter
          OAuthMessage requestMessage = OAuthServlet.getMessage((HttpServletRequest)request, null);
 
          ExoContainer container = getContainer();
-         ExoOAuthProviderService provider = (ExoOAuthProviderService)container.getComponentInstanceOfType(ExoOAuthProviderService.class);
+         ExoOAuth3LeggedProviderService provider = (ExoOAuth3LeggedProviderService)container.getComponentInstanceOfType(ExoOAuth3LeggedProviderService.class);
          OAuthAccessor accessor = provider.getAccessor(requestMessage);
          
          OAuthValidator validator = (OAuthValidator)container.getComponentInstanceOfType(OAuthValidator.class);
@@ -62,7 +62,7 @@ public class ExoThreeLeggedOAuthFilter extends AbstractFilter
       }
       catch (Exception e)
       {
-         ExoOAuthProviderService.handleException(e, (HttpServletRequest)request, (HttpServletResponse)response, false);
+         ExoOAuth3LeggedProviderService.handleException(e, (HttpServletRequest)request, (HttpServletResponse)response, false);
       }
 
    }
