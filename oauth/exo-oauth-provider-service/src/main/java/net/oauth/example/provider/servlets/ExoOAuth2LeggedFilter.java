@@ -66,7 +66,7 @@ public class ExoOAuth2LeggedFilter extends AbstractFilter
       }
       catch (Exception e)
       {
-         ExoOAuth3LeggedProviderService.handleException(e, (HttpServletRequest)request, (HttpServletResponse)response, false);
+         ExoOAuth2LeggedProviderService.handleException(e, (HttpServletRequest)request, (HttpServletResponse)response, false);
       }
 
    }

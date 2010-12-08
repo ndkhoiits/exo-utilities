@@ -26,11 +26,11 @@
    xmlns="http://www.exoplaform.org/xml/ns/kernel_1_1.xsd">
 
   <component>
-    <type>net.oauth.example.provider.core.ExoOAuthProviderService</type>
+    <type>net.oauth.example.provider.core.ExoOAuth3LeggedProviderService</type>
   </component>
   
   <component>
-    <type>net.oauth.example.provider.core.ExoTwoLeggedOAuthProviderService</type>
+    <type>net.oauth.example.provider.core.ExoOAuth2LeggedProviderService</type>
   </component>
 
   <component>

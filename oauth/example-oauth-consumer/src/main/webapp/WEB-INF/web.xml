@@ -33,7 +33,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>ExoOAuth3LeggedCallback</servlet-name>
-        <url-pattern>/OAuth/OAuth3LeggedCallback</url-pattern>
+        <url-pattern>/OAuth/ExoOAuth3LeggedCallback</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>GateIn2LeggedConsumerServlet</servlet-name>
