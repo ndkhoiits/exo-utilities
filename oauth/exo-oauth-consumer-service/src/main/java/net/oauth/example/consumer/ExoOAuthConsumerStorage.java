@@ -29,7 +29,7 @@ import net.oauth.OAuthConsumer;
  *          nguyenanhkien2a@gmail.com
  * Dec 3, 2010  
  */
-public class OAuthConsumerStorage
+public class ExoOAuthConsumerStorage
 {
    private static ConsumerProperties consumers = null;
    private static Properties consumerProperties = null;
@@ -39,7 +39,7 @@ public class OAuthConsumerStorage
       if (consumers == null) {
           String resourceName = "consumer.properties";
           consumerProperties = ConsumerProperties
-                  .getProperties(OAuthConsumerStorage.class.getResource(resourceName));
+                  .getProperties(ExoOAuthConsumerStorage.class.getResource(resourceName));
           consumers = new ConsumerProperties(consumerProperties);
       }
 
@@ -48,11 +48,11 @@ public class OAuthConsumerStorage
           String value = consumerProperties.getProperty(key);
           if (value == null) {
               // Compute the callbackURL from the servlet context.
-              URL resource = OAuthConsumerStorage.class.getResource(OAuth3LeggedCallback.PATH);
+              URL resource = ExoOAuthConsumerStorage.class.getResource(ExoOAuth3LeggedCallback.PATH);
               if (resource != null) {
                   value = resource.toExternalForm();
               } else {
-                  value = OAuth3LeggedCallback.PATH;
+                  value = ExoOAuth3LeggedCallback.PATH;
               }
               consumerProperties.setProperty(key, value);
           }

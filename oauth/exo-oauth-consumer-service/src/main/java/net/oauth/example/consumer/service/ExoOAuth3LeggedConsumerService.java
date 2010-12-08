@@ -40,8 +40,8 @@ import net.oauth.OAuthProblemException;
 import net.oauth.ParameterStyle;
 import net.oauth.example.consumer.CookieMap;
 import net.oauth.example.consumer.ExoOAuthMessage;
-import net.oauth.example.consumer.OAuth3LeggedCallback;
-import net.oauth.example.consumer.OAuthConsumerStorage;
+import net.oauth.example.consumer.ExoOAuth3LeggedCallback;
+import net.oauth.example.consumer.ExoOAuthConsumerStorage;
 import net.oauth.example.consumer.RedirectException;
 import net.oauth.server.OAuthServlet;
 
@@ -51,17 +51,17 @@ import net.oauth.server.OAuthServlet;
  *          nguyenanhkien2a@gmail.com
  * Dec 3, 2010  
  */
-public class OAuth3LeggedConsumerService extends OAuth2LeggedConsumerService
+public class ExoOAuth3LeggedConsumerService extends ExoOAuth2LeggedConsumerService
 {   
-   public OAuth3LeggedConsumerService(){}
+   public ExoOAuth3LeggedConsumerService(){}
    
    public ExoOAuthMessage send(String consumerName, String restEndpointUrl, HttpServletRequest request, HttpServletResponse response) 
    throws OAuthException, IOException, URISyntaxException{      
-      OAuthConsumer consumer = OAuthConsumerStorage.getConsumer(consumerName);
+      OAuthConsumer consumer = ExoOAuthConsumerStorage.getConsumer(consumerName);
       OAuthAccessor accessor = getAccessor(request, response, consumer);
       OAuthMessage message = accessor.newRequestMessage(OAuthMessage.GET, restEndpointUrl, null);
 
-      OAuthMessage responseMessage = OAuth2LeggedConsumerService.CLIENT.invoke(message, ParameterStyle.AUTHORIZATION_HEADER);
+      OAuthMessage responseMessage = ExoOAuth2LeggedConsumerService.CLIENT.invoke(message, ParameterStyle.AUTHORIZATION_HEADER);
       return (new ExoOAuthMessage(consumerName, responseMessage));
    }  
    
@@ -150,7 +150,7 @@ public class OAuth3LeggedConsumerService extends OAuth2LeggedConsumerService
    throws IOException
    {
       URL base = new URL(new URL(request.getRequestURL().toString()), //
-              request.getContextPath() + OAuth3LeggedCallback.PATH);
+              request.getContextPath() + ExoOAuth3LeggedCallback.PATH);
       return OAuth.addParameters(base.toExternalForm() //
               , "consumer", consumerName //
               , "returnTo", getRequestPath(request) //
@@ -204,7 +204,7 @@ public class OAuth3LeggedConsumerService extends OAuth2LeggedConsumerService
            if (consumerName != null && RECOVERABLE_PROBLEMS.contains(problem)) {
                try {
                    CookieMap cookies = new CookieMap(request, response);
-                   OAuthConsumer consumer = OAuthConsumerStorage.getConsumer(consumerName);
+                   OAuthConsumer consumer = ExoOAuthConsumerStorage.getConsumer(consumerName);
                    OAuthAccessor accessor = newAccessor(consumer, cookies);
                    getAccessToken(request, cookies, accessor);
                    // getAccessToken(request, consumer,

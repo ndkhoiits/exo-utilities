@@ -28,7 +28,7 @@ import net.oauth.OAuthAccessor;
 import net.oauth.OAuthConsumer;
 import net.oauth.OAuthMessage;
 import net.oauth.OAuthProblemException;
-import net.oauth.example.consumer.service.OAuth3LeggedConsumerService;
+import net.oauth.example.consumer.service.ExoOAuth3LeggedConsumerService;
 import net.oauth.server.OAuthServlet;
 
 /**
@@ -36,9 +36,9 @@ import net.oauth.server.OAuthServlet;
  * 
  * @author John Kristian
  */
-public class OAuth3LeggedCallback extends HttpServlet {
+public class ExoOAuth3LeggedCallback extends HttpServlet {
 
-    public static final String PATH = "/OAuth/OAuth3LeggedCallback";
+    public static final String PATH = "/OAuth/ExoOAuth3LeggedCallback";
 
     protected final Logger log = Logger.getLogger(getClass().getName());
 
@@ -55,9 +55,9 @@ public class OAuth3LeggedCallback extends HttpServlet {
         final String consumerName = requestMessage.getParameter("consumer");
         try {
             requestMessage.requireParameters("consumer");
-            consumer = OAuthConsumerStorage.getConsumer(consumerName);
+            consumer = ExoOAuthConsumerStorage.getConsumer(consumerName);
             final CookieMap cookies = new CookieMap(request, response);
-            final OAuthAccessor accessor = OAuth3LeggedConsumerService.newAccessor(consumer,
+            final OAuthAccessor accessor = ExoOAuth3LeggedConsumerService.newAccessor(consumer,
                     cookies);
             final String expectedToken = accessor.requestToken;
             String requestToken = requestMessage.getParameter(OAuth.OAUTH_TOKEN);
@@ -81,7 +81,7 @@ public class OAuth3LeggedCallback extends HttpServlet {
             if (verifier != null) {
                 parameters = OAuth.newList(OAuth.OAUTH_VERIFIER, verifier);
             }
-            OAuthMessage result = OAuth3LeggedConsumerService.CLIENT.getAccessToken(accessor, null, parameters);
+            OAuthMessage result = ExoOAuth3LeggedConsumerService.CLIENT.getAccessToken(accessor, null, parameters);
             if (accessor.accessToken != null) {
                 String returnTo = requestMessage.getParameter("returnTo");
                 if (returnTo == null) {
@@ -101,7 +101,7 @@ public class OAuth3LeggedCallback extends HttpServlet {
             problem.getParameters().putAll(result.getDump());
             throw problem;
         } catch (Exception e) {
-            OAuth3LeggedConsumerService.handleException(e, request, response, consumerName);
+            ExoOAuth3LeggedConsumerService.handleException(e, request, response, consumerName);
         }
     }
 

@@ -33,7 +33,7 @@ import net.oauth.ParameterStyle;
 import net.oauth.client.OAuthClient;
 import net.oauth.client.httpclient3.HttpClient3;
 import net.oauth.example.consumer.ExoOAuthMessage;
-import net.oauth.example.consumer.OAuthConsumerStorage;
+import net.oauth.example.consumer.ExoOAuthConsumerStorage;
 import net.oauth.example.consumer.RedirectException;
 
 /**
@@ -42,19 +42,19 @@ import net.oauth.example.consumer.RedirectException;
  *          nguyenanhkien2a@gmail.com
  * Dec 3, 2010  
  */
-public class OAuth2LeggedConsumerService
+public class ExoOAuth2LeggedConsumerService
 {
    public static final OAuthClient CLIENT = new OAuthClient(new HttpClient3());
    
-   public OAuth2LeggedConsumerService(){}
+   public ExoOAuth2LeggedConsumerService(){}
    
    public ExoOAuthMessage send(String consumerName, String restEndpointUrl, HttpServletRequest request, HttpServletResponse response) 
    throws OAuthException, IOException, URISyntaxException{      
-      OAuthConsumer consumer = OAuthConsumerStorage.getConsumer(consumerName);
+      OAuthConsumer consumer = ExoOAuthConsumerStorage.getConsumer(consumerName);
       OAuthAccessor accessor = getAccessor(request, response, consumer);
       OAuthMessage message = accessor.newRequestMessage(OAuthMessage.GET, restEndpointUrl, null);
 
-      OAuthMessage responseMessage = OAuth2LeggedConsumerService.CLIENT.invoke(message, ParameterStyle.AUTHORIZATION_HEADER);
+      OAuthMessage responseMessage = ExoOAuth2LeggedConsumerService.CLIENT.invoke(message, ParameterStyle.AUTHORIZATION_HEADER);
       return (new ExoOAuthMessage(consumerName, responseMessage));
    }  
 
@@ -77,7 +77,7 @@ public class OAuth2LeggedConsumerService
        OutputStream out = into.getOutputStream();
        into.setContentType(from.getMessage().getHeader("Content-Type"));
        try {
-           OAuth2LeggedConsumerService.copyAll(in, out);
+           ExoOAuth2LeggedConsumerService.copyAll(in, out);
        } finally {
            in.close();
        }

@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.oauth.example.consumer.ExoOAuthMessage;
-import net.oauth.example.consumer.service.OAuth3LeggedConsumerService;
+import net.oauth.example.consumer.service.ExoOAuth3LeggedConsumerService;
 
 /**
  * Created by The eXo Platform SAS
@@ -42,11 +42,11 @@ public class Google3LeggedConsumerServlet extends HttpServlet
     String restEndpointUrl = "http://www.google.com/m8/feeds/contacts/default/base";     
     
     try {
-      OAuth3LeggedConsumerService oauthService = new OAuth3LeggedConsumerService();
+       ExoOAuth3LeggedConsumerService oauthService = new ExoOAuth3LeggedConsumerService();
       ExoOAuthMessage result = oauthService.send(consumer, restEndpointUrl, request, response);
-      OAuth3LeggedConsumerService.copyResponse(result, response);
+      ExoOAuth3LeggedConsumerService.copyResponse(result, response);
     } catch (Exception e) {
-       OAuth3LeggedConsumerService.handleException(e, request, response, consumer);
+       ExoOAuth3LeggedConsumerService.handleException(e, request, response, consumer);
     }
    }
 }
