@@ -8,8 +8,8 @@
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
     <servlet>
-        <servlet-name>OAuth3LeggedCallback</servlet-name>
-        <servlet-class>net.oauth.example.consumer.OAuth3LeggedCallback</servlet-class>
+        <servlet-name>ExoOAuth3LeggedCallback</servlet-name>
+        <servlet-class>net.oauth.example.consumer.ExoOAuth3LeggedCallback</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>GateIn2LeggedConsumerServlet</servlet-name>
@@ -32,7 +32,7 @@
         <servlet-class>net.oauth.example.consumer.servlet.Yahoo3LeggedConsumerServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>OAuth3LeggedCallback</servlet-name>
+        <servlet-name>ExoOAuth3LeggedCallback</servlet-name>
         <url-pattern>/OAuth/OAuth3LeggedCallback</url-pattern>
     </servlet-mapping>
     <servlet-mapping>

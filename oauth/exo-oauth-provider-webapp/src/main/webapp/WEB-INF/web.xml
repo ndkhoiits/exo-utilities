@@ -8,12 +8,12 @@
       <filter-class>org.exoplatform.ws.frameworks.servlet.PortalContainerInitializedFilter</filter-class>
    </filter>
    <filter>
-      <filter-name>ExoThreeLeggedOAuthFilter</filter-name>
-      <filter-class>net.oauth.example.provider.servlets.ExoThreeLeggedOAuthFilter</filter-class>
+      <filter-name>ExoOAuth3LeggedFilter</filter-name>
+      <filter-class>net.oauth.example.provider.servlets.ExoOAuth3LeggedFilter</filter-class>
    </filter>
    <filter>
-      <filter-name>ExoTwoLeggedOAuthFilter</filter-name>
-      <filter-class>net.oauth.example.provider.servlets.ExoTwoLeggedOAuthFilter</filter-class>
+      <filter-name>ExoOAuth2LeggedFilter</filter-name>
+      <filter-class>net.oauth.example.provider.servlets.ExoOAuth2LeggedFilter</filter-class>
    </filter>
    <filter>
       <filter-name>RestEncodingFilter</filter-name>
@@ -29,15 +29,15 @@
       <url-pattern>/*</url-pattern>
    </filter-mapping>
    <filter-mapping>
-      <filter-name>ExoTwoLeggedOAuthFilter</filter-name>
+      <filter-name>ExoOAuth2LeggedFilter</filter-name>
       <url-pattern>/rest/SocialRest/*</url-pattern>
    </filter-mapping>
    <filter-mapping>
-      <filter-name>ExoThreeLeggedOAuthFilter</filter-name>
+      <filter-name>ExoOAuth3LeggedFilter</filter-name>
       <url-pattern>/rest/SimpleRest/*</url-pattern>
    </filter-mapping>
    <filter-mapping>
-      <filter-name>ExoThreeLeggedOAuthFilter</filter-name>
+      <filter-name>ExoOAuth3LeggedFilter</filter-name>
       <url-pattern>/echo</url-pattern>
    </filter-mapping>
    <filter-mapping>
