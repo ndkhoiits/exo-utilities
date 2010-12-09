@@ -38,4 +38,8 @@
     <type>net.oauth.SimpleOAuthValidator</type>
   </component>
   
+  <component>
+    <type>net.oauth.example.provider.core.ExoOAuthConsumerStorage</type>
+  </component>
+  
 </configuration>

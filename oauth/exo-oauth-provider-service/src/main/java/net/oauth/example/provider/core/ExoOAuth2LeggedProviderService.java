@@ -20,11 +20,15 @@ import net.oauth.OAuthAccessor;
 import net.oauth.OAuthConsumer;
 import net.oauth.OAuthMessage;
 import net.oauth.OAuthProblemException;
-import net.oauth.OAuthValidator;
+import net.oauth.server.OAuthServlet;
 
-import org.exoplatform.services.cache.CacheService;
+import org.exoplatform.container.ExoContainerContext;
 
 import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Created by The eXo Platform SAS
@@ -32,17 +36,42 @@ import java.io.IOException;
  *          nguyenanhkien2a@gmail.com
  * Dec 1, 2010  
  */
-public class ExoOAuth2LeggedProviderService extends ExoOAuth3LeggedProviderService
+public class ExoOAuth2LeggedProviderService
 {    
-   public ExoOAuth2LeggedProviderService(OAuthValidator validator, CacheService cService)
-   {
-      super(validator, cService);
+   public ExoOAuth2LeggedProviderService() {
    }
 
+   public synchronized OAuthConsumer getConsumer(OAuthMessage requestMessage) throws IOException, OAuthProblemException
+   {
+
+      OAuthConsumer consumer = null;
+      // try to load from local cache if not throw exception
+      String consumer_key = requestMessage.getConsumerKey();
+
+      ExoOAuthConsumerStorage consumerManagement = (ExoOAuthConsumerStorage) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(ExoOAuthConsumerStorage.class);
+      consumer =  consumerManagement.getConsumer(consumer_key);
+
+      if (consumer == null)
+      {
+         OAuthProblemException problem = new OAuthProblemException("token_rejected");
+         throw problem;
+      }
+
+      return consumer;
+   }
+   
    public OAuthAccessor getAccessor(OAuthMessage requestMessage) throws IOException, OAuthProblemException
    {
       OAuthConsumer authConsumer = getConsumer(requestMessage);
       OAuthAccessor accessor = new OAuthAccessor(authConsumer);      
       return accessor;
    }
+   
+   public static void handleException(Exception e, HttpServletRequest request, HttpServletResponse response,
+         boolean sendBody) throws IOException, ServletException
+      {
+         String realm = (request.isSecure()) ? "https://" : "http://";
+         realm += request.getLocalName();
+         OAuthServlet.handleException(response, e, realm, sendBody);
+      }
 }

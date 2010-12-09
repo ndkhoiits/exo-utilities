@@ -19,122 +19,30 @@
 package net.oauth.example.provider.core;
 
 import net.oauth.OAuthAccessor;
-import net.oauth.OAuthConsumer;
 import net.oauth.OAuthException;
 import net.oauth.OAuthMessage;
 import net.oauth.OAuthProblemException;
 import net.oauth.OAuthValidator;
-import net.oauth.server.OAuthServlet;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.ExoCache;
 import org.exoplatform.services.security.Identity;
-import org.picocontainer.Startable;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author <a href="trongtt@gmail.com">Trong Tran</a>
  * @version $Revision$
  */
 
-public class ExoOAuth3LeggedProviderService implements Startable
+public class ExoOAuth3LeggedProviderService  extends ExoOAuth2LeggedProviderService
 {
    private ExoCache<String, OAuthAccessor> tokens;
    
    public ExoOAuth3LeggedProviderService(OAuthValidator validator, CacheService cService)
    {
       tokens = cService.getCacheInstance(ExoOAuth3LeggedProviderService.class.getSimpleName());
-   }
-
-   private static final Map<String, OAuthConsumer> ALL_CONSUMERS = Collections
-      .synchronizedMap(new HashMap<String, OAuthConsumer>(10));
-   
-   public void start()
-   {
-      try
-      {
-         loadConsumers();
-      }
-      catch (IOException e)
-      {
-         e.printStackTrace();
-      }
-   }
-
-   public void stop()
-   {
-   }
-
-   private void loadConsumers() throws IOException
-   {
-      Properties p = new Properties();
-      String resourceName = "provider.properties";
-      URL resource = ExoOAuth3LeggedProviderService.class.getResource(resourceName);
-      if (resource == null)
-      {
-         throw new IOException("resource not found: " + resourceName);
-      }
-      InputStream stream = resource.openStream();
-      try
-      {
-         p.load(stream);
-      }
-      finally
-      {
-         stream.close();
-      }
-
-      // for each entry in the properties file create a OAuthConsumer
-      for (Map.Entry<Object, Object> prop : p.entrySet())
-      {
-         String consumer_key = (String)prop.getKey();
-         // make sure it's key not additional properties
-         if (!consumer_key.contains("."))
-         {
-            String consumer_secret = (String)prop.getValue();
-            if (consumer_secret != null)
-            {
-               String consumer_description = (String)p.getProperty(consumer_key + ".description");
-               String consumer_callback_url = (String)p.getProperty(consumer_key + ".callbackURL");
-               // Create OAuthConsumer w/ key and secret
-               OAuthConsumer consumer = new OAuthConsumer(consumer_callback_url, consumer_key, consumer_secret, null);
-               consumer.setProperty("name", consumer_key);
-               consumer.setProperty("description", consumer_description);
-               ALL_CONSUMERS.put(consumer_key, consumer);
-            }
-         }
-      }
-
-   }
-
-   public synchronized OAuthConsumer getConsumer(OAuthMessage requestMessage) throws IOException, OAuthProblemException
-   {
-
-      OAuthConsumer consumer = null;
-      // try to load from local cache if not throw exception
-      String consumer_key = requestMessage.getConsumerKey();
-
-      consumer = ExoOAuth3LeggedProviderService.ALL_CONSUMERS.get(consumer_key);
-
-      if (consumer == null)
-      {
-         OAuthProblemException problem = new OAuthProblemException("token_rejected");
-         throw problem;
-      }
-
-      return consumer;
    }
 
    /**
@@ -243,13 +151,5 @@ public class ExoOAuth3LeggedProviderService implements Startable
 
       // update token in local cache
       tokens.put(accessor.accessToken, accessor);
-   }
-
-   public static void handleException(Exception e, HttpServletRequest request, HttpServletResponse response,
-      boolean sendBody) throws IOException, ServletException
-   {
-      String realm = (request.isSecure()) ? "https://" : "http://";
-      realm += request.getLocalName();
-      OAuthServlet.handleException(response, e, realm, sendBody);
    }
 }
